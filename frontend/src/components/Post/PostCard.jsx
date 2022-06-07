@@ -1,87 +1,94 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { updatePost, deletePost } from '../../store/actions/post.actions';
 import { Link } from 'react-router-dom';
-import { ButtonSubmit } from '../Buttons';
+import { baseURL } from '../../api';
+import { Button, ButtonLike, ButtonSubmit } from '../Buttons';
+import { FormUpload } from '../Form';
 import { FontAwesomeIcon } from '../FontAwesomeIcon';
 import { Avatar } from '../User';
-import { CommentCard } from '.';
+import { isEmpty, dateParser } from '../../utils';
 
-function PostCard({ post }) {
-  const dispatch = useDispatch();
-  const currentUser = useSelector(state => state.user.currentUser);
-  const [ isUpdated, setIsUpadted ] = useState(true);
+function Post({ post }) {
+  const { admin, id } = useSelector(state => state.user.currentUser);
+  const users = useSelector(state => state.user.all);
+  const [ showMenu, setShowMenu ] = useState(false);
+  const [ showComment, setShowComment ] = useState(false);
+  const [ isUpdated, setIsUpadted ] = useState(false);
   const [ contentUpdate, setContentUpdate ] = useState("");
   const [ attachmentUpdate, setAttachmentUpdate ] = useState("");
-  const [ showComments, setShowComments ] = useState(false);
+  // const isLiked = JSON.parse(post.likes).find(id => id === id);
 
-  const handleMenu = () => {};
+  // const handleLike = () => {
+  //   likePost(post.id,{ userId: id })
+  // };
 
-  const handleLike = () => {};
+  const handleUpdatePost = e => {
+    e.preventDefault();
+    
+    const data = new FormData();
+    if (contentUpdate) data.append("content", contentUpdate);
+    if (attachmentUpdate) data.append("file", attachmentUpdate);
 
-  const handleComment = () => {};
-
-  const handleUpdatePost = () => {
-    if (contentUpdate || attachmentUpdate) {
-      dispatch(updatePost(post.id, { contentUpdate, attachmentUpdate }))
-    }
-
+    updatePost(post.id, data);
+    
     setIsUpadted(false);
+    
+    setContentUpdate("");
+    setAttachmentUpdate("");
   };
 
   const handleDeletePost = () => {
-    dispatch(deletePost(post.id));
+    deletePost(post.id);
   };
 
   return (
     <article className="post">
       <header>
-        <Link className="post-user" to={ `/profile/${ 2 }` }>
+        <Link className="post-user" to={ `/profile/${ post.userId }` }>
           <Avatar avatar="/images/users/avatar.png" />
-          <h3>Fullname</h3>
+          <h3>{ !isEmpty(users[0]) && users.map(user => user.id === post.userId && user.fullname) }</h3>
         </Link>
-        { (currentUser.admin || currentUser.id === post.userId) && <button className="btn-menu" onClick={ handleMenu }><FontAwesomeIcon icon="fa-solid fa-ellipsis" /></button> }
-        { <button onClick={ () => setIsUpadted(!isUpdated) }></button> }
-        { <button onClick={ () => handleDeletePost }></button> }
-        <div className="post-menu"></div>
+        { (admin || id === post.userId) &&
+          !showMenu &&
+          <button className="btn-menu" onClick={ () => setShowMenu(!showMenu) }><FontAwesomeIcon icon="fa-solid fa-ellipsis" /></button> }
+        { showMenu &&
+        <div className="post-menu">
+          <Button btnTitle="Modifier" btnValue={ <FontAwesomeIcon icon="fa-solid fa-pen" /> } click={ () => setIsUpadted(!isUpdated) } />
+          <Button btnTitle="Supprimer" btnValue={ <FontAwesomeIcon icon="fa-solid fa-trash-can" /> } click={ handleDeletePost } />
+          <Button btnTitle="Annuler" btnValue={ <FontAwesomeIcon icon="fa-solid fa-xmark" /> }  click={ () => setShowMenu(!showMenu) } />
+        </div>
+        }
       </header>
 
-
-      { post.attachment === null ?
-        <figure className="post-body">
-          { isUpdated === false ? <img src={ post.attachment } alt="post attachment" /> : <input type="file" /> }
-          <figcaption>
-            { isUpdated === false ? <p className="post-content">{ post.content }</p>
-              : <div><textarea value={ contentUpdate } onChange={ e => setContentUpdate(e.target.value) } /></div>}
-          </figcaption>
-        </figure>
-      :
-        <div className="post-body">
+      <figure className="post-body">
+        { isUpdated === false ? ( post.attachment === "" || post.attachment === null ? null : <img src={ baseURL + post.attachment } alt="post attachment" />) : <FormUpload change={ e => setAttachmentUpdate(e.target.files[0]) } /> }
+        <figcaption>
           { isUpdated === false ? <p className="post-content">{ post.content }</p>
             : <div><textarea value={ contentUpdate } onChange={ e => setContentUpdate(e.target.value) } /></div>}
-        </div>
-      }
+        </figcaption>
+      </figure>
 
       <footer>
         <div className="post-icons">
           <div className="post-icon">
-            <FontAwesomeIcon onClick={ handleLike } icon="fa-regular fa-heart" />
-            <span>{ post.likes.length }</span>
+            {/* <Button click={ handleLike } btnValue={ isLiked ? <FontAwesomeIcon icon="fa-solid fa-heart" /> : <FontAwesomeIcon icon="fa-regular fa-heart" /> } /> */}
+            <ButtonLike post={ post } />
+            <span>{ JSON.parse(post.likes).length }</span>
           </div>
           <div className="post-icon">
-            <FontAwesomeIcon onClick={ setShowComments(!showComments) } icon="fa-regular fa-comment" />
-            <span>{ post.comments.length }</span>
+            <Button click={ () => setShowComment(!showComment) } btnValue={ <FontAwesomeIcon icon="fa-regular fa-comment" /> } />
+            <span>{ JSON.parse(post.comments).length }</span>
           </div>
         </div>
 
-        { isUpdated && <ButtonSubmit btnType=".submit" btnValue="Submit" click={ handleUpdatePost } /> }
+        { isUpdated && <ButtonSubmit btnType=".submit" value="Submit" click={ handleUpdatePost } /> }
 
-        <p className="timestamp">il y a 16 secondes</p>
+        <p className="timestamp">{ dateParser(post.createdAt) }</p>
       </footer>
-
-      { showComments && <CommentCard post={ post } /> }
+      { showComment && <div className="comments">Comment</div>}
     </article>
   );
 }
 
-export default PostCard;
+export default Post;
