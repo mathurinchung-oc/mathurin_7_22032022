@@ -1,0 +1,47 @@
+.btn {
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background-color: #0065fc;
+  color: #fff;
+}
+
+.btn.scroll-to-top {
+  position: fixed;
+  bottom: 7%;
+  right: 5%;
+  z-index: 100;
+  padding: 10px;
+  background-color: #aaa;
+  color: white;
+  font-size: 18px;
+}
+
+.btn.scroll-to-top:hover {
+  background-color: #555;
+}
+
+.btn.edit-profile {
+  border: 1px solid #ddd;
+  background-color: inherit;
+}
+
+.btn.drop-menu {
+  padding: 15px;
+  background-color: inherit;
+}
+
+.btn.follow {
+  border: 1px solid #0065fc;
+  background-color: #0065fc;
+  color: #fff;
+}
+
+.btn.close {
+  background-color: inherit;
+}

@@ -1,0 +1,77 @@
+.AuthLayout {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 5px;
+  width: 450px;
+  min-width: 220px;
+  max-width: 100%;
+}
+
+.AuthContainer {
+  margin-top: 15px;
+}
+
+.AuthHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 35px auto 25px;
+}
+
+.AuthLogo {
+  width: 195px;
+}
+
+.AuthForm {
+  margin: 0 auto 25px;
+  max-width: 320px;
+}
+
+.AuthLayout .FormControl {
+  display: flex;
+  margin-top: 15px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 5px 10px;
+  width: 100%;
+  background-color: #FFF;
+}
+
+.AuthLayout .FormControl:focus-within {
+  border: 1px solid #bbb;
+}
+
+.AuthLayout .FormLabel {
+  color: #aaa;
+}
+
+.AuthInput {
+  margin-left: 15px;
+  border: none;
+  width: 100%;
+  line-height: 18px;
+}
+
+.AuthInput:focus {
+  outline: none;
+}
+
+.AuthRedirection {
+  margin: 15px auto;
+  text-align: center;
+}
+
+.AuthLayout .submit {
+  margin-top: 15px;
+  width: 100%;
+}
+
+@media screen and (min-width: 450px) {
+  .AuthContainer {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #f7f7f7;
+  }
+}

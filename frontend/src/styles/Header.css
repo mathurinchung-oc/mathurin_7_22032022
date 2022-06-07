@@ -1,0 +1,73 @@
+.PrivateHeader {
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  height: 45px;
+  background-color: #fff;
+}
+
+.PrivateHeader .LogoMobile {
+  width: 30px;
+}
+
+.PrivateHeader .LogoDesktop {
+  display: none;
+}
+
+.PrivateHeader nav {
+  display: none;
+}
+
+@media screen and (min-width: 992px) {
+  .PrivateHeader {
+    justify-content: space-between;
+    padding: 0 15px;
+    height: 75px;
+  }
+
+  .PrivateHeader .LogoMobile {
+    display: none;
+  }
+  
+  .PrivateHeader .LogoDesktop {
+    display: block;
+    width: 40%;
+  }
+
+  .PrivateHeader nav {
+    display: block;
+  }
+
+  .PrivateHeader .NavList {
+    display: flex;
+    align-items: center;
+  }
+
+  .PrivateHeader nav .NavLink {
+    color: #92bdff;
+    font-size: 24px;
+  }
+
+  .PrivateHeader .NavItem:last-child {
+    margin-left: 25px;
+  }
+
+  .PrivateHeader nav .active {
+    color: #0065fc;
+  }
+
+  .PrivateHeader .Avatar {
+    width: 35px;
+    height: 35px;
+  }
+
+  .PrivateHeader .btn.drop-menu {
+    width: 73px;
+    height: 73px;
+  }
+}
+

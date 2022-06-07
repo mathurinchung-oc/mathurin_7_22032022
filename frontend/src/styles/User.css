@@ -1,0 +1,60 @@
+.Avatar {
+  width: 50px;
+  height: 50px;
+}
+
+.Avatar img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+
+
+li:first-child .UserCard {
+  margin-top: 55px;
+}
+
+li:last-child .UserCard {
+  margin-bottom: 60px;
+}
+
+.UserCard {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px auto 15px;
+  padding: 20px;
+  width: 768px;
+  max-width: 100%;
+  background-color: #fff;
+  color: inherit;
+  box-shadow: 0 3px 15px #0000001a;
+}
+
+.UserCard:hover {
+  background-color: #deebff;
+}
+
+.UserCard .UserInfo {
+  display: flex;
+}
+
+.UserCard .DisplayName {
+  margin-left: 7px;
+  color: #666;
+}
+
+.UserCard .btn {
+  display: none;
+}
+
+@media screen and (min-width: 769px) {
+  .UserCard {
+    border-radius: 10px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  li:first-child .UserCard {
+    margin-top: 85px;
+  }
+}

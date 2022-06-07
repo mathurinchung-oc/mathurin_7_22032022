@@ -1,0 +1,14 @@
+
+
+@import url('./Buttons.css');
+@import url('./Form.css');
+@import url('Header.css');
+@import url('Navbar.css');
+@import url('User.css');
+@import url('Post.css');
+
+@import url('Home.css');
+@import url('Profile.css');
+
+@import url('./PrivateLayout.css');
+@import url('./AuthLayout.css');
