@@ -11,10 +11,10 @@ function ButtonLike({ post }) {
 
   const handleLike = () => {
     if (!liked) {
-      dispatch(likePost(post.id, id));
+      dispatch(likePost(post.id, { userId: id }));
       setLiked(true);
     } else {
-      dispatch(dislikePost(post.id, id));
+      dispatch(dislikePost(post.id, { userId: id }));
       setLiked(false)
     }
   };

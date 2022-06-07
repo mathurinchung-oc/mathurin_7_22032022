@@ -1,5 +1,5 @@
 import { config, axios } from '../../api';
-import { setPosts, setLikePost, setDislikePost } from '../features/post.slice';
+import { setPosts, setCreatePost, setDeletePost, setLikePost, setDislikePost, setUpdatePost } from '../features/post.slice';
 
 const url = "/post";
 
@@ -14,58 +14,71 @@ const getAllPosts = () => {
   };
 };
 
-const createPost = async (data) => {
-  // return async dispatch => {
+const createPost = (data) => {
+  return async dispatch => {
     try {
-      await axios.post(url, data, config)
-      // return dispatch();
+      const response = await axios.post(url, data, config);
+      return dispatch(setCreatePost(response.data.newPost));
     } catch (error) {
       console.error(error.message);
     }
-  // };
+  };
 };
 
-const updatePost = async (postId, data) => {
-  // return async dispatch => {
+const updatePost = (postId, data) => {
+  return async dispatch => {
     try {
       console.log(data)
-      await axios.put(`${ url }/${ postId }`, data, config)
+      await axios.put(`${ url }/${ postId }`, data, config);
+      dispatch(setUpdatePost({ postId, ...data }));
     } catch (error) {
       console.error(error);
     }
-  // };
+  };
 };
 
-const deletePost = async (postId) => {
-  // return async dispatch => {
+const deletePost = (postId) => {
+  return async dispatch => {
     try {
       await axios.delete(`${url}/${postId}`, config);
-    } catch (error) {
-      console.error(error.message);
-    }
-  // };
-};
-
-const likePost = (postId, data) => {
-  return async dispatch => {
-    try {
-      await axios.post(`${url}/${postId}/like`, { userId: data }, config);
-      return dispatch(setLikePost({ payload: { postId, userId: data } }));
+      return dispatch(setDeletePost({ postId }));
     } catch (error) {
       console.error(error.message);
     }
   };
 };
 
-const dislikePost = (postId, data) => {
-  return async dispatch => {
-    try {
-      await axios.post(`${url}/${postId}/like`, { userId: data }, config);
-      return dispatch(setDislikePost({ payload: { postId, userId: data } }));
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+const likePost = (postId, userId) => {
+//   return async dispatch => {
+//     try {
+//       await axios.post(`${url}/${postId}/like`, userId, config);
+//       return dispatch(setLikePost({ payload: { postId, userId } }));
+//     } catch (error) {
+//       console.error(error.message);
+//     }
+//   };
 };
 
-export { getAllPosts, createPost, updatePost, deletePost, likePost, dislikePost }
+const dislikePost = (postId, userId) => {
+//   return async dispatch => {
+//     try {
+//       await axios.post(`${url}/${postId}/like`, userId, config);
+//       return dispatch(setDislikePost({ payload: { postId, userId } }));
+//     } catch (error) {
+//       console.error(error.message);
+//     }
+//   };
+};
+
+const createComment = async (postId, data) => {
+//   // return async dispatch => {
+//     try {
+//       await axios.post(`${url}/${postId}/comment`, data, config)
+//       // return dispatch();
+//     } catch (error) {
+//       console.error(error.message);
+//     }
+//   // };
+};
+
+export { getAllPosts, createPost, updatePost, deletePost, likePost, dislikePost, createComment }

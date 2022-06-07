@@ -1,9 +1,9 @@
 const fs = require('fs');
-const { Post, Like } = require('../models');
+const { Post } = require('../models');
 
 exports.getAllPosts = async (request, response) => {
   try {
-    const posts = await Post.findAll({ attributes: [ 'id', 'userId', 'content', 'attachment', 'likes', 'comments', 'createdAt' ], order: [ [ 'createdAt', 'DESC' ] ] });
+    const posts = await Post.findAll({ attributes: [ 'id', 'userId', 'content', 'attachment', 'updatedAt' ], order: [ [ 'createdAt', 'DESC' ] ] });
 
     response.status(200).json(posts);
   } catch (error) {
@@ -15,9 +15,9 @@ exports.createPost = async (request, response) => {
   try {
     const postObject = request.file ? { ...request.body, attachment: `/${ request.file.path }` } : { ...request.body };
     
-    await Post.create({ ...postObject, likes: "[]", comments: "[]" });
+    const newPost = await Post.create({ ...postObject });
 
-    response.status(201).json({ message: "post successfully created!" });
+    response.status(201).json({ message: "post successfully created!", newPost });
   } catch (error) {
     response.status(400).json({ error: error.message });
   }
@@ -90,4 +90,53 @@ exports.likePost = async (request, response) => {
   } catch (error) {
     response.status(400).json({ error: error.message });
   }
+};
+
+exports.createComment = async (request, response) => {
+  try {
+    const comment = request.body;
+
+    const postFound = await Post.findOne({ attributes: [ 'comments' ], where: { id: request.params.id } });
+    if (!postFound) return response.status(404).json({ error: "post not found" });
+
+    const comments = JSON.parse(postFound.comments);
+    comments.push(comment);
+    console.log(comments)
+
+    await postFound.update({ comments: JSON.stringify(comments), id: request.params.id });
+
+    response.status(201).json({ message: "comment successfully created!" });
+  } catch (error) {
+    response.status(400).json({ error: error.message });
+  }
+};
+
+exports.deleteComment = async (request, response) => {
+  // try {
+  //   const postFound = await Post.findOne({ where: { id: request.params.id } });
+  //   if (!postFound) return response.status(404).json({ error: "post not found" });
+
+  //   if (postFound.attachment) {
+  //     const filename = postFound.attachment.split('images/posts')[1];
+  //     fs.unlink(`images/posts/${filename}`, async () => {
+  //       try {
+  //         await Post.destroy({ where: { id: request.params.id } });
+    
+  //         response.status(200).json({ message: "post has been deleted" });
+  //       } catch (error) {
+  //         response.status(400).json({ error: error.message });
+  //       }
+  //     });
+  //   } else {
+  //     try {
+  //       await Post.destroy({ where: { id: request.params.id } });
+  
+  //       response.status(200).json({ message: "post has been deleted" });
+  //     } catch (error) {
+  //       response.status(400).json({ error: error.message });
+  //     }
+  //   }
+  // } catch (error) {
+  //   response.status(400).json({ error: error.message });
+  // }
 };

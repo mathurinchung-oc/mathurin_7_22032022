@@ -5,19 +5,21 @@ const slice = {
   initialState: { all: [] },
   reducers: {
     setPosts: (state, { payload }) => { state.all = payload },
+    setCreatePost: (state, { payload }) => { state.all = [ payload, ...state.all ] },
     setUpdatePost: (state, { payload }) => {
-      return state.all.map((post) => {
+      state.all = state.all.map((post) => {
         if (post.id === payload.postId) {
           return {
             ...post,
             content: payload.content,
+            attachment: payload.attachment
           };
         } else return post;
       });
     },
-    setDeletePost: (state, { payload }) => { state.all.filter((post) => post.id !== payload.postId) },
+    setDeletePost: (state, { payload }) => { state.all = state.all.filter(post => post.id !== payload.postId) },
     setLikePost: (state, { payload }) => {
-      return state.all.map(post => {
+      state.all = state.all.map(post => {
         if (post.id === payload.postId) {
           return {
             ...post,
@@ -45,5 +47,5 @@ const slice = {
 
 export const postSlice = createSlice(slice);
 
-export const { setPosts, setLikePost, setDislikePost } = postSlice.actions;
+export const { setPosts, setCreatePost, setUpdatePost, setDeletePost, setLikePost, setDislikePost } = postSlice.actions;
 export default postSlice.reducer;

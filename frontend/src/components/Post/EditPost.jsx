@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { createPost } from '../../store/actions/post.actions';
 import { Avatar } from '../User';
@@ -8,6 +8,7 @@ import { Form, FormControl, FormUpload } from '../Form';
 import { Button, ButtonSubmit } from '../Buttons';
 
 function EditPost() {
+  const dispatch = useDispatch();
   const { id, avatar, admin } = useSelector(state => state.user.currentUser);
   const [ content, setContent ] = useState("");
   const [ attachment, setAttachment ] = useState(null);
@@ -22,7 +23,7 @@ function EditPost() {
       data.append('content', content);
       if (file) data.append('file', file);
 
-      createPost(data);
+      dispatch(createPost(data));
 
       setContent("");
       setAttachment("");
