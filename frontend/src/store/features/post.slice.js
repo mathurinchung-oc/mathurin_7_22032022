@@ -5,9 +5,12 @@ const slice = {
   initialState: { all: [] },
   reducers: {
     setPosts: (state, { payload }) => { state.all = payload },
-    setCreatePost: (state, { payload }) => { state.all = [ payload, ...state.all ] },
+    setCreatePost: (state, { payload }) => {
+      const { UserId } = payload;
+      state.all = [ { userId: parseInt(UserId), ...payload }, ...state.all ];
+    },
     setUpdatePost: (state, { payload }) => {
-      state.all = state.all.map((post) => {
+      state.all = state.all.map(post => {
         if (post.id === payload.postId) {
           return {
             ...post,

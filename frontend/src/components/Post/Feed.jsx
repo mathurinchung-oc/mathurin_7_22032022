@@ -4,7 +4,6 @@ import { isEmpty } from "../../utils";
 
 function Feed() {
   const posts = useSelector(state => state.post.all);
-  console.log(posts)
 
   // useEffect(() => {
     // if (!isEmpty(posts[0])) {

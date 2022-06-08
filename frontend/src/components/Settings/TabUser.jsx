@@ -28,8 +28,6 @@ function TabUser() {
     setFullname("");
     setBio("");
     setFile("");
-
-    // window.location = `/profile/${ userId }`;
   };
 
   return (

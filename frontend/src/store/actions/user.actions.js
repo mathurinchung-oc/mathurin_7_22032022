@@ -1,5 +1,5 @@
 import { config, axios } from '../../api';
-import { setCurrentUser, setUsers } from '../features/user.slice';
+import { setCurrentUser, setUsers, setUpdateUser } from '../features/user.slice';
 
 const url = "/user";
 
@@ -28,8 +28,8 @@ const getOneUser = (userId) => {
 const updateUser = (userId, data) => {
   return async dispatch => {
     try {
-      await axios.put(`${ url }/${ userId }`, data, config);
-      return dispatch(getOneUser(userId));
+      const response = await axios.put(`${ url }/${ userId }`, data, config);
+      return dispatch(setUpdateUser({ ...response.data.userUpdated }));
     } catch (error) {
       console.error(error.message);
     }

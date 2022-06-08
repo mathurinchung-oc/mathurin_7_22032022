@@ -4,9 +4,18 @@ const slice = {
   name: "user",
   initialState: { currentUser: {}, all: [] },
   reducers: {
-    setCurrentUser: (state, { payload }) => { state.currentUser = payload },
     setUsers: (state, { payload }) => { state.all = payload },
-    setUpdateUser: (state, { payload }) => { state.currentUser = payload }
+    setCurrentUser: (state, { payload }) => { state.currentUser = payload },
+    setUpdateUser: (state, { payload }) => {
+      const { id, fullname, bio, avatar } = payload;
+      state.currentUser = { fullname, bio, avatar, ...state.currentUser };
+      
+      state.all = state.all.map(user => {
+        if (user.id === parseInt(id)) {
+          return { ...user, fullname, bio, avatar };
+        } else return user;
+      });
+    }
   }
 };
 

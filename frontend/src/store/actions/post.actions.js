@@ -28,9 +28,8 @@ const createPost = (data) => {
 const updatePost = (postId, data) => {
   return async dispatch => {
     try {
-      console.log(data)
-      await axios.put(`${ url }/${ postId }`, data, config);
-      dispatch(setUpdatePost({ postId, ...data }));
+      const response = await axios.put(`${ url }/${ postId }`, data, config);
+      dispatch(setUpdatePost({ postId, ...response.data.postUpdated }));
     } catch (error) {
       console.error(error);
     }

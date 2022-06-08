@@ -24,8 +24,8 @@ function Post({ post }) {
     e.preventDefault();
     
     const data = new FormData();
-    if (contentUpdate) data.append("content", contentUpdate);
-    if (attachmentUpdate) data.append("file", attachmentUpdate);
+    contentUpdate && data.append("content", contentUpdate);
+    attachmentUpdate && data.append("file", attachmentUpdate);
 
     dispatch(updatePost(post.id, data));
     
@@ -64,7 +64,7 @@ function Post({ post }) {
       </header>
 
       <figure className="post-body">
-        { isUpdated === false ? ( post.attachment === "" || post.attachment === null ? null : <img src={ baseURL + post.attachment } alt="post attachment" />) : <FormUpload change={ e => setAttachmentUpdate(e.target.files[0]) } /> }
+        { isUpdated === false ? ( !post.attachment ? null : <img src={ baseURL + post.attachment } alt="post attachment" />) : <FormUpload change={ e => setAttachmentUpdate(e.target.files[0]) } /> }
         <figcaption>
           { isUpdated === false ? <p className="post-content">{ post.content }</p>
             : <div><textarea value={ contentUpdate } onChange={ e => setContentUpdate(e.target.value) } /></div>}
