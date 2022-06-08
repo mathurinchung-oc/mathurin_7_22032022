@@ -8,9 +8,9 @@ exports.getAllPosts = async (request, response) => {
       include: [
         { model: User, attributes: [ 'id', 'fullname', 'avatar' ] },
         { model: Like, attributes: [ 'userId', 'postId' ] },
-        { model: Comment, attributes: [ 'userId', 'postId', 'comment' ] },
+        { model: Comment, attributes: [ 'id', 'userId', 'postId', 'comment', 'updatedAt' ] },
       ],
-      order: [ [ 'updatedAt', 'DESC' ] ]
+      order: [ [ Comment, 'updatedAt', 'DESC' ] ]
     });
 
     response.status(200).json(posts);
@@ -110,7 +110,8 @@ exports.likePost = async (request, response) => {
 
 exports.createComment = async (request, response) => {
   try {
-    const { userId, comment } = request.body;
+    const { comment } = request.body;
+    const { userId } = request.user;
 
     const postFound = await Post.findOne({ where: { id: request.params.id } });
     if (!postFound) return response.status(404).json({ error: "post not found" });
@@ -124,48 +125,33 @@ exports.createComment = async (request, response) => {
   }
 };
 
-exports.updateComment = async (request, response) => {};
+exports.updateComment = async (request, response) => {
+  try {
+    const { data } = request.body;
+    // const { userId } = request.user;
+
+    const commentFound = await Comment.findOne({ where: { id: request.params.id } });
+    if (!commentFound) return response.status(404).json({ error: "comment not found" });
+
+    const payload = await commentFound.update({ comment: data });
+
+    response.status(200).json({ message: "comment successfully updated!", payload });
+  } catch (error) {
+    response.status(400).json({ error: error.message })
+  }
+};
 
 exports.deleteComment = async (request, response) => {
   try {
-    const { userId } = request.user;
-    const postId = request.params.id
+    const id = request.params.id
 
-    const commentFound = await Comment.findOne({ where: { userId, postId } });
+    const commentFound = await Comment.findOne({ where: { id } });
     if (!commentFound) return response.status(404).json({ error: "comment not found" });
 
-    await Comment.destroy({ where: { userId, postId } });
+    await Comment.destroy({ where: { id } });
 
-    response.status(201).json({ message: "comment successfully deleted!", payload: { postId, userId } });
+    response.status(201).json({ message: "comment successfully deleted!", payload: { postId: commentFound.postId, id } });
   } catch (error) {
     response.status(400).json({ error: error.message });
   }
-
-  // try {
-  //   const postFound = await Post.findOne({ where: { id: request.params.id } });
-  //   if (!postFound) return response.status(404).json({ error: "post not found" });
-
-  //   if (postFound.attachment) {
-  //     const filename = postFound.attachment.split('images/posts')[1];
-  //     fs.unlink(`images/posts/${filename}`, async () => {
-  //       try {
-  //         await Post.destroy({ where: { id: request.params.id } });
-    
-  //         response.status(200).json({ message: "post has been deleted" });
-  //       } catch (error) {
-  //         response.status(400).json({ error: error.message });
-  //       }
-  //     });
-  //   } else {
-  //     try {
-  //       await Post.destroy({ where: { id: request.params.id } });
-  
-  //       response.status(200).json({ message: "post has been deleted" });
-  //     } catch (error) {
-  //       response.status(400).json({ error: error.message });
-  //     }
-  //   }
-  // } catch (error) {
-  //   response.status(400).json({ error: error.message });
-  // }
 };

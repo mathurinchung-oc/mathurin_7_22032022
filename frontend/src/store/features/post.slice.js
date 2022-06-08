@@ -18,7 +18,9 @@ const slice = {
             content: payload.content,
             attachment: payload.attachment
           };
-        } else return post;
+        }
+
+        return post;
       });
     },
     setDeletePost: (state, { payload }) => { state.all = state.all.filter(post => post.id !== payload.postId) },
@@ -49,11 +51,29 @@ const slice = {
         return post;
       });
     },
-    setUpdateComment: (state, { payload }) => {},
+    setUpdateComment: (state, { payload }) => {
+      const { id, postId } = payload;
+      state.all = state.all.map(post => {
+        if (post.id === postId) {
+          return { 
+            ...post,
+            Comments: post.Comments.map(comment => {
+              if (comment.id === id) {
+                return {
+                  ...comment, comment: payload.comment
+                };
+              }
+              return comment
+            })
+          };
+        }
+        return post;
+      });
+    },
     setDeleteComment: (state, { payload }) => {
       state.all = state.all.map(post => {
-        if (post.id === parseInt(payload.postId)) {
-          return { ...post, Comments: post.Comments.filter(comment => comment.userId !== payload.userId) };
+        if (post.id === payload.postId) {
+          return { ...post, Comments: post.Comments.filter(comment => comment.id !== parseInt(payload.id)) };
         }
 
         return post;
@@ -64,5 +84,5 @@ const slice = {
 
 export const postSlice = createSlice(slice);
 
-export const { setPosts, setCreatePost, setUpdatePost, setDeletePost, setLikePost, setDislikePost, setAddComment, setDeleteComment } = postSlice.actions;
+export const { setPosts, setCreatePost, setUpdatePost, setDeletePost, setLikePost, setDislikePost, setAddComment, setUpdateComment, setDeleteComment } = postSlice.actions;
 export default postSlice.reducer;

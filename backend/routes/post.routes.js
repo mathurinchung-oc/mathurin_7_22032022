@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { auth, upload } = require('../middlewares');
 
-const { getAllPosts, createPost, updatePost, deletePost, likePost, createComment, deleteComment } = require('../controllers/post.controller');
+const { getAllPosts, createPost, updatePost, deletePost, likePost, createComment, updateComment, deleteComment } = require('../controllers/post.controller');
 
 router.get('/', auth, getAllPosts);
 router.post('/', auth, upload("posts"), createPost);
@@ -13,6 +13,7 @@ router.delete('/:id', auth, deletePost);
 router.post('/:id/like', auth, likePost);
 
 router.post('/:id/comment', auth, createComment);
-router.delete('/:id/comment', auth, deleteComment);
+router.put('/comment/:id', auth, updateComment);
+router.delete('/comment/:id', auth, deleteComment);
 
 module.exports = router;

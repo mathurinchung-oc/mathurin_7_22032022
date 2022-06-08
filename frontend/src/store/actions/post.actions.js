@@ -1,5 +1,5 @@
 import { config, axios } from '../../api';
-import { setPosts, setCreatePost, setDeletePost, setUpdatePost, setLikePost, setDislikePost, setAddComment, setDeleteComment } from '../features/post.slice';
+import { setPosts, setCreatePost, setDeletePost, setUpdatePost, setLikePost, setDislikePost, setAddComment, setUpdateComment, setDeleteComment } from '../features/post.slice';
 
 const url = "/post";
 
@@ -69,10 +69,10 @@ const dislikePost = (postId, userId) => {
   };
 };
 
-const createComment = (postId, data) => {
+const createComment = (postId, comment) => {
   return async dispatch => {
     try {
-      const response = await axios.post(`${url}/${postId}/comment`, data, config);
+      const response = await axios.post(`${url}/${postId}/comment`, comment, config);
       return dispatch(setAddComment(response.data.newComment));
     } catch (error) {
       console.error(error.message);
@@ -80,12 +80,23 @@ const createComment = (postId, data) => {
   };
 };
 
-const updateComment = async (postId) => {};
-
-const deleteComment = (postId) => {
+const updateComment = (id, data) => {
   return async dispatch => {
     try {
-      const response = await axios.delete(`${url}/${postId}/comment`, config);
+      console.log(data)
+      const response = await axios.put(`${url}/comment/${id}`, { data }, config);
+      console.log(response.data);
+      return dispatch(setUpdateComment(response.data.payload));
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+};
+
+const deleteComment = (id) => {
+  return async dispatch => {
+    try {
+      const response = await axios.delete(`${url}/comment/${id}`, config);
       return dispatch(setDeleteComment(response.data.payload));
     } catch (error) {
       console.error(error.message);

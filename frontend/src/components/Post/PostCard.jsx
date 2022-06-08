@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePost, deletePost } from '../../store/actions/post.actions';
+import { updatePost, deletePost, createComment } from '../../store/actions/post.actions';
 import { Link } from 'react-router-dom';
 import { baseURL } from '../../api';
 import { CommentCard } from '.';
 import { Button, ButtonLike, ButtonSubmit } from '../Buttons';
-import { FormUpload } from '../Form';
+import { Form, FormUpload } from '../Form';
 import { FontAwesomeIcon } from '../FontAwesomeIcon';
 import { Avatar } from '../User';
-import { dateParser } from '../../utils';
+import { isEmpty, dateParser } from '../../utils';
 
 function Post({ post }) {
   const dispatch = useDispatch();
   const { admin, id } = useSelector(state => state.user.currentUser);
   const [ showMenu, setShowMenu ] = useState(false);
   const [ showComment, setShowComment ] = useState(false);
+  const [ comment, setComment ] = useState("");
   const [ isUpdated, setIsUpadted ] = useState(false);
   const [ contentUpdate, setContentUpdate ] = useState("");
   const [ attachmentUpdate, setAttachmentUpdate ] = useState("");
@@ -41,6 +42,15 @@ function Post({ post }) {
   const handleCancelButton = () => {
     setIsUpadted(false);
     setShowMenu(false);
+  };
+
+  const handleSubmitComment = e => {
+    e.preventDefault();
+    const data = { userId: id, comment };
+
+    dispatch(createComment(post.id, data));
+
+    setComment("");
   };
 
   return (
@@ -84,7 +94,21 @@ function Post({ post }) {
         </div>
         <p className="timestamp">{ dateParser(post.updatedAt) }</p>
       </footer>
-      { showComment && <CommentCard postId={ post.id } comments={ post.Comments } /> }
+      {/* { showComment && <CommentCard postId={ post.id } comments={ post.Comments } /> } */}
+      { showComment && 
+      <div className="Comments">
+        <Form submit={ handleSubmitComment }>
+          <textarea placeholder="comment" value={ comment } onChange={ e => setComment(e.target.value) } />
+          <ButtonSubmit value="Submit" />
+        </Form>
+        { !isEmpty(post.Comments[0]) ?
+          <ul className="CommentList">
+            { post.Comments.map(comment => <li key={ comment.id }><CommentCard key={ comment.id } comment={ comment } /></li> ) }
+          </ul>
+          : null
+        }
+      </div>
+      }
     </article>
   );
 }
