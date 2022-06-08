@@ -3,7 +3,8 @@ const router = express.Router();
 
 const { auth, upload } = require('../middlewares');
 
-const { getAllPosts, createPost, updatePost, deletePost, likePost, createComment, deleteComment } = require('../controllers/post.controller');
+const { getAllPosts, createPost, updatePost, deletePost, likePost } = require('../controllers/post.controller');
+const { createComment, deleteComment } = require('../controllers/comment.controller');
 
 router.get('/', auth, getAllPosts);
 router.post('/', auth, upload("posts"), createPost);

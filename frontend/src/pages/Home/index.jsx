@@ -7,7 +7,7 @@ function Home() {
   return (
     <main id="Home">
       <EditPost />
-      <Feed />
+      <Feed posts={ posts } />
     </main>
   );
 }

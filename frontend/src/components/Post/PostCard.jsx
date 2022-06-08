@@ -8,12 +8,11 @@ import { Button, ButtonLike, ButtonSubmit } from '../Buttons';
 import { FormUpload } from '../Form';
 import { FontAwesomeIcon } from '../FontAwesomeIcon';
 import { Avatar } from '../User';
-import { isEmpty, dateParser } from '../../utils';
+import { dateParser } from '../../utils';
 
 function Post({ post }) {
   const dispatch = useDispatch();
   const { admin, id } = useSelector(state => state.user.currentUser);
-  const users = useSelector(state => state.user.all);
   const [ showMenu, setShowMenu ] = useState(false);
   const [ showComment, setShowComment ] = useState(false);
   const [ isUpdated, setIsUpadted ] = useState(false);
@@ -49,7 +48,7 @@ function Post({ post }) {
       <header>
         <Link className="post-user" to={ `/profile/${ post.userId }` }>
           <Avatar avatar="/images/users/avatar.png" />
-          <h3>{ !isEmpty(users[0]) && users.map(user => user.id === post.userId && user.fullname) }</h3>
+          <h3>{ post.User.fullname }</h3>
         </Link>
         { (admin || id === post.userId) &&
           !showMenu &&
@@ -74,18 +73,18 @@ function Post({ post }) {
       <footer>
         <div className="post-icons">
           <div className="post-icon">
-            {/* <ButtonLike post={ post } /> */}
-            {/* <span>{ JSON.parse(post.likes).length }</span> */}
+            <ButtonLike post={ post } />
+            <span>{ post.Likes.length }</span>
           </div>
           <div className="post-icon">
             <Button click={ () => setShowComment(!showComment) } btnValue={ <FontAwesomeIcon icon="fa-regular fa-comment" /> } />
-            {/* <span>{ JSON.parse(post.comments).length }</span> */}
+            <span>{ post.Comments.length }</span>
           </div>
         </div>
 
         { isUpdated && <ButtonSubmit btnType=".submit" value="Submit" click={ handleUpdatePost } /> }
 
-        <p className="timestamp">{ dateParser(post.createdAt) }</p>
+        <p className="timestamp">{ dateParser(post.updatedAt) }</p>
       </footer>
       {/* { showComment && !isEmpty(JSON.parse(post.comments)[0]) &&  <CommentCard postId={ post.id } comments={ JSON.parse(post.comments) } /> } */}
     </article>

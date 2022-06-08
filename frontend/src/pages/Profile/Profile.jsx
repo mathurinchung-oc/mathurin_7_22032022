@@ -11,6 +11,7 @@ function Profile() {
 
   const users = useSelector(state => state.user.all);
   const user = users.find(user => user.id === userId);
+
   const posts = useSelector(state => state.post.all);
   const postsUser = posts.filter(post => post.userId === userId);
 

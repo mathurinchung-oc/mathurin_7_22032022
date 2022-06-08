@@ -1,21 +1,7 @@
-import { useSelector } from 'react-redux';
 import { PostCard } from '.';
 import { isEmpty } from "../../utils";
 
-function Feed() {
-  const posts = useSelector(state => state.post.all);
-
-  // useEffect(() => {
-    // if (!isEmpty(posts[0])) {
-    //   const postsArr = Object.keys(posts).map(i => posts[i]);
-      // let sortedArray = postsArr.sort((a, b) => {
-      //   return b.likers.length - a.likers.length;
-      // });
-      // sortedArray.length = 3;
-      // dispatch(getTrends(sortedArray));
-    // }
-  // }, [posts, dispatch]);
-
+function Feed({ posts }) {
   return (
     <>
     { !isEmpty(posts[0]) ?

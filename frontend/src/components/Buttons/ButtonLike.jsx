@@ -5,22 +5,22 @@ import { Button } from '../Buttons';
 import { FontAwesomeIcon } from '../FontAwesomeIcon';
 
 function ButtonLike({ post }) {
+  const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
   const { id } = useSelector(state => state.user.currentUser);
-  const dispatch = useDispatch();
 
   const handleLike = () => {
     if (!liked) {
-      dispatch(likePost(post.id, { userId: id }));
+      dispatch(likePost(post.id, id));
       setLiked(true);
     } else {
-      dispatch(dislikePost(post.id, { userId: id }));
+      dispatch(dislikePost(post.id, id));
       setLiked(false)
     }
   };
 
   useEffect(() => {
-    if (post.likes.includes(id)) setLiked(true)
+    if (post.Likes.find(like => like.userId === id)) setLiked(true)
     else setLiked(false);
   }, [ id, post ]);
 

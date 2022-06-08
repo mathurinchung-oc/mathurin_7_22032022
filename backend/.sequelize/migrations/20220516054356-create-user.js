@@ -22,8 +22,7 @@ module.exports = {
       },
       avatar: {
         allowNull: false,
-        type: Sequelize.STRING(150),
-        defaultValue: '/images/users/avatar.png'
+        type: Sequelize.STRING(150)
       },
       bio: {
         allowNull: true,
@@ -31,8 +30,7 @@ module.exports = {
       },
       admin: {
         allowNull: false,
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

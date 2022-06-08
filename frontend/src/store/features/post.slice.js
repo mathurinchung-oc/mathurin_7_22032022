@@ -23,23 +23,17 @@ const slice = {
     setDeletePost: (state, { payload }) => { state.all = state.all.filter(post => post.id !== payload.postId) },
     setLikePost: (state, { payload }) => {
       state.all = state.all.map(post => {
-        if (post.id === payload.postId) {
-          return {
-            ...post,
-            likes: [ payload.userId, ...post.likes ]
-          };
-        }
+        if (post.id === parseInt(payload.postId)) {
+          return { ...post, Likes: [ payload, ...post.Likes ] };
+      }
 
         return post;
       });
     },
     setDislikePost: (state, { payload }) => {
-      return state.all.map((post) => {
-        if (post.id === payload.postId) {
-          return {
-            ...post,
-            likes: post.likes.filter(id => id !== payload.userId)
-          };
+      state.all = state.all.map(post => {
+        if (post.id === parseInt(payload.postId)) {
+          return { ...post, Likes: post.Likes.filter(like => like.userId !== payload.userId) };
         }
 
         return post;

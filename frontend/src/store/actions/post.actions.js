@@ -39,7 +39,7 @@ const updatePost = (postId, data) => {
 const deletePost = (postId) => {
   return async dispatch => {
     try {
-      await axios.delete(`${url}/${postId}`, config);
+      await axios.delete(`${ url }/${ postId }`, config);
       return dispatch(setDeletePost({ postId }));
     } catch (error) {
       console.error(error.message);
@@ -48,25 +48,25 @@ const deletePost = (postId) => {
 };
 
 const likePost = (postId, userId) => {
-//   return async dispatch => {
-//     try {
-//       await axios.post(`${url}/${postId}/like`, userId, config);
-//       return dispatch(setLikePost({ payload: { postId, userId } }));
-//     } catch (error) {
-//       console.error(error.message);
-//     }
-//   };
+  return async dispatch => {
+    try {
+      const response = await axios.post(`${ url }/${ postId }/like`, { userId }, config);
+      return dispatch(setLikePost(response.data.like));
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 };
 
 const dislikePost = (postId, userId) => {
-//   return async dispatch => {
-//     try {
-//       await axios.post(`${url}/${postId}/like`, userId, config);
-//       return dispatch(setDislikePost({ payload: { postId, userId } }));
-//     } catch (error) {
-//       console.error(error.message);
-//     }
-//   };
+  return async dispatch => {
+    try {
+      const response = await axios.post(`${url}/${postId}/like`, { userId }, config);
+      return dispatch(setDislikePost(response.data.dislike));
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 };
 
 const createComment = async (postId, data) => {
