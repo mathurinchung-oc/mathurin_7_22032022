@@ -40,10 +40,19 @@ const slice = {
         return post;
       });
     },
+    setAddComment: (state, { payload }) => {
+      state.all = state.all.map(post => {
+        if (post.id === parseInt(payload.postId)) {
+          return { ...post, Comments: [ payload, ...post.Comments ] };
+        }
+
+        return post;
+      });
+    }
   }
 };
 
 export const postSlice = createSlice(slice);
 
-export const { setPosts, setCreatePost, setUpdatePost, setDeletePost, setLikePost, setDislikePost } = postSlice.actions;
+export const { setPosts, setCreatePost, setUpdatePost, setDeletePost, setLikePost, setDislikePost, setAddComment } = postSlice.actions;
 export default postSlice.reducer;

@@ -110,18 +110,17 @@ exports.likePost = async (request, response) => {
 
 exports.createComment = async (request, response) => {
   try {
-    const comment = request.body;
+    const { userId, comment } = request.body;
 
-    const postFound = await Post.findOne({ attributes: [ 'comments' ], where: { id: request.params.id } });
+    const postFound = await Post.findOne({ where: { id: request.params.id } });
     if (!postFound) return response.status(404).json({ error: "post not found" });
 
-    const comments = JSON.parse(postFound.comments);
-    comments.push(comment);
-    console.log(comments)
+    // await postFound.update({ comments: JSON.stringify(comments), id: request.params.id });
 
-    await postFound.update({ comments: JSON.stringify(comments), id: request.params.id });
+    const postId = postFound.id;
+    const newComment = await Comment.create({ userId, postId, comment })
 
-    response.status(201).json({ message: "comment successfully created!" });
+    response.status(201).json({ message: "comment successfully created!", newComment });
   } catch (error) {
     response.status(400).json({ error: error.message });
   }

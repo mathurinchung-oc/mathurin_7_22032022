@@ -1,5 +1,5 @@
 import { config, axios } from '../../api';
-import { setPosts, setCreatePost, setDeletePost, setLikePost, setDislikePost, setUpdatePost } from '../features/post.slice';
+import { setPosts, setCreatePost, setDeletePost, setUpdatePost, setLikePost, setDislikePost, setAddComment } from '../features/post.slice';
 
 const url = "/post";
 
@@ -69,15 +69,15 @@ const dislikePost = (postId, userId) => {
   };
 };
 
-const createComment = async (postId, data) => {
-//   // return async dispatch => {
-//     try {
-//       await axios.post(`${url}/${postId}/comment`, data, config)
-//       // return dispatch();
-//     } catch (error) {
-//       console.error(error.message);
-//     }
-//   // };
+const createComment = (postId, data) => {
+  return async dispatch => {
+    try {
+      const response = await axios.post(`${url}/${postId}/comment`, data, config);
+      return dispatch(setAddComment(response.data.newComment));
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 };
 
 const deleteComment = async (postId) => {};

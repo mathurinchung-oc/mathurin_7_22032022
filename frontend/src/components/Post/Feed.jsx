@@ -6,7 +6,7 @@ function Feed({ posts }) {
     <>
     { !isEmpty(posts[0]) ?
        <ul className="Feed">
-        {   posts.map(post => <li key={ post.id }><PostCard post={ post } /></li>) }
+        { posts.map(post => <li key={ post.id }><PostCard post={ post } /></li>) }
        </ul>
        :
       <div className="ErrorMessage">
