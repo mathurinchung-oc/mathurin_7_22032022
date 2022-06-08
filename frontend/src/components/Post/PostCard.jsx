@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updatePost, deletePost } from '../../store/actions/post.actions';
 import { Link } from 'react-router-dom';
 import { baseURL } from '../../api';
-// import { CommentCard } from '.';
+import { CommentCard } from '.';
 import { Button, ButtonLike, ButtonSubmit } from '../Buttons';
 import { FormUpload } from '../Form';
 import { FontAwesomeIcon } from '../FontAwesomeIcon';
@@ -35,7 +35,7 @@ function Post({ post }) {
   };
 
   const handleDeletePost = () => {
-    dispatch(deletePost(post.id));
+    dispatch(deletePost(post.id, id));
   };
 
   const handleCancelButton = () => {
@@ -68,6 +68,7 @@ function Post({ post }) {
           { isUpdated === false ? <p className="post-content">{ post.content }</p>
             : <div><textarea value={ contentUpdate } onChange={ e => setContentUpdate(e.target.value) } /></div>}
         </figcaption>
+        { isUpdated && <ButtonSubmit btnType=".submit" value="Submit" click={ handleUpdatePost } /> }
       </figure>
 
       <footer>
@@ -77,16 +78,13 @@ function Post({ post }) {
             <span>{ post.Likes.length }</span>
           </div>
           <div className="post-icon">
-            <Button click={ () => setShowComment(!showComment) } btnValue={ <FontAwesomeIcon icon="fa-regular fa-comment" /> } />
+            <Button click={ () => setShowComment(!showComment) } btnValue={ showComment ? <FontAwesomeIcon icon="fa-solid fa-comment" /> : <FontAwesomeIcon icon="fa-regular fa-comment" /> } />
             <span>{ post.Comments.length }</span>
           </div>
         </div>
-
-        { isUpdated && <ButtonSubmit btnType=".submit" value="Submit" click={ handleUpdatePost } /> }
-
         <p className="timestamp">{ dateParser(post.updatedAt) }</p>
       </footer>
-      {/* { showComment && !isEmpty(JSON.parse(post.comments)[0]) &&  <CommentCard postId={ post.id } comments={ JSON.parse(post.comments) } /> } */}
+      { showComment && <CommentCard postId={ post.id } comments={ post.Comments } /> }
     </article>
   );
 }

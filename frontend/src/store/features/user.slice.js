@@ -15,11 +15,12 @@ const slice = {
           return { ...user, fullname, bio, avatar };
         } else return user;
       });
-    }
+    },
+    setDeleteUser: (state, { payload }) => {}
   }
 };
 
 export const usersSlice = createSlice(slice);
 
-export const { setCurrentUser, setUsers, setUpdateUser } = usersSlice.actions;
+export const { setCurrentUser, setUsers, setUpdateUser, setDeleteUser } = usersSlice.actions;
 export default usersSlice.reducer;

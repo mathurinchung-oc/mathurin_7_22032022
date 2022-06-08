@@ -22,10 +22,21 @@ exports.getAllPosts = async (request, response) => {
 exports.createPost = async (request, response) => {
   try {
     const postObject = request.file ? { ...request.body, attachment: `/${ request.file.path }` } : { ...request.body };
-    
-    const newPost = await Post.create({ ...postObject });
 
-    response.status(201).json({ message: "post successfully created!", newPost });
+    const newPost = await Post.create({ ...postObject });
+    console.log(newPost.id)
+
+    const post = await Post.findOne({
+      attributes: [ 'id', 'userId', 'content', 'attachment', 'updatedAt' ],
+      include: [
+        { model: User, attributes: [ 'id', 'fullname', 'avatar' ] },
+        { model: Like, attributes: [ 'userId', 'postId' ] },
+        { model: Comment, attributes: [ 'userId', 'postId', 'comment' ] },
+      ],
+      where: { id: newPost.id }
+    });
+
+    response.status(201).json({ message: "post successfully created!", post });
   } catch (error) {
     response.status(400).json({ error: error.message });
   }

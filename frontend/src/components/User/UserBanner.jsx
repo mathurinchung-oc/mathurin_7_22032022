@@ -4,7 +4,7 @@ function UserBanner({ user }) {
   return (
     <div className="UserBanner">
       <User user={ user } />
-      <p className="UserBio">{ user.bio }</p>
+      <p className="UserBio">{ user.bio === "null" ? "" : user.bio }</p>
     </div>
   );
 }

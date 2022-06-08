@@ -18,7 +18,7 @@ const createPost = (data) => {
   return async dispatch => {
     try {
       const response = await axios.post(url, data, config);
-      return dispatch(setCreatePost(response.data.newPost));
+      return dispatch(setCreatePost(response.data.post));
     } catch (error) {
       console.error(error.message);
     }
@@ -80,4 +80,6 @@ const createComment = async (postId, data) => {
 //   // };
 };
 
-export { getAllPosts, createPost, updatePost, deletePost, likePost, dislikePost, createComment }
+const deleteComment = async (postId) => {};
+
+export { getAllPosts, createPost, updatePost, deletePost, likePost, dislikePost, createComment, deleteComment }

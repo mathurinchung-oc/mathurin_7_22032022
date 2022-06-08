@@ -7,6 +7,7 @@ const slice = {
     setPosts: (state, { payload }) => { state.all = payload },
     setCreatePost: (state, { payload }) => {
       const { UserId } = payload;
+      delete payload.UserId;
       state.all = [ { userId: parseInt(UserId), ...payload }, ...state.all ];
     },
     setUpdatePost: (state, { payload }) => {
