@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createComment } from "../../store/actions/post.actions";
+import { createComment, updateComment, deleteComment } from "../../store/actions/post.actions";
 import { isEmpty } from "../../utils";
-import { ButtonSubmit } from "../Buttons";
+import { Button, ButtonSubmit } from "../Buttons";
 import { FontAwesomeIcon } from "../FontAwesomeIcon";
 import { Form } from "../Form";
 
@@ -20,6 +20,14 @@ function CommentCard({ postId, comments }) {
     setComment("");
   };
 
+  const handleUpdateComment = () => {
+    dispatch(updateComment())
+  };
+
+  const handleDeleteComment = () => {
+    dispatch(deleteComment(postId));
+  };
+
   console.log(comments)
 
   return (
@@ -34,8 +42,8 @@ function CommentCard({ postId, comments }) {
             { comments.map((comment, index) => (
               <li key={ index }>
                 <div>{ comment.comment }</div>
-                { (admin || comment.userId === id) && <FontAwesomeIcon icon="fa-solid fa-pen" /> }
-                { (admin || comment.userId === id) && <FontAwesomeIcon icon="fa-solid fa-xmark" /> }
+                { (admin || comment.userId === id) && <Button click={ handleUpdateComment } btnValue={ <FontAwesomeIcon icon="fa-solid fa-pen" /> } /> }
+                { (admin || comment.userId === id) && <Button click={ handleDeleteComment } btnValue={ <FontAwesomeIcon icon="fa-solid fa-xmark" /> } /> }
               </li>
             )) }
           </ul>

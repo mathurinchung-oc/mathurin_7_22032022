@@ -96,12 +96,12 @@ exports.likePost = async (request, response) => {
 
     if (!isAlreadyLiked) {
       await Like.create({ userId, postId });
-      response.status(201).json({ message: "liked!!!", like: { postId, userId } });
+      response.status(201).json({ message: "liked!!!", payload: { postId, userId } });
     }
 
     if (isAlreadyLiked) {
-      await Like.destroy({ where: { userId, postId } }, { truncate: true, restartIdentity: true });
-      response.status(200).json({ message: "disliked!!!", dislike: { postId, userId } });
+      await Like.destroy({ where: { userId, postId } });
+      response.status(200).json({ message: "disliked!!!", payload: { postId, userId } });
     }
   } catch (error) {
     response.status(400).json({ error: error.message });
@@ -115,8 +115,6 @@ exports.createComment = async (request, response) => {
     const postFound = await Post.findOne({ where: { id: request.params.id } });
     if (!postFound) return response.status(404).json({ error: "post not found" });
 
-    // await postFound.update({ comments: JSON.stringify(comments), id: request.params.id });
-
     const postId = postFound.id;
     const newComment = await Comment.create({ userId, postId, comment })
 
@@ -126,7 +124,23 @@ exports.createComment = async (request, response) => {
   }
 };
 
+exports.updateComment = async (request, response) => {};
+
 exports.deleteComment = async (request, response) => {
+  try {
+    const { userId } = request.user;
+    const postId = request.params.id
+
+    const commentFound = await Comment.findOne({ where: { userId, postId } });
+    if (!commentFound) return response.status(404).json({ error: "comment not found" });
+
+    await Comment.destroy({ where: { userId, postId } });
+
+    response.status(201).json({ message: "comment successfully deleted!", payload: { postId, userId } });
+  } catch (error) {
+    response.status(400).json({ error: error.message });
+  }
+
   // try {
   //   const postFound = await Post.findOne({ where: { id: request.params.id } });
   //   if (!postFound) return response.status(404).json({ error: "post not found" });

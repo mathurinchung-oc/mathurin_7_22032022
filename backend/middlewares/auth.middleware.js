@@ -9,6 +9,8 @@ exports.auth = (request, response, next) => {
     if (!decoded) return response.status(401).json({ error: "unauthorized request" });
     // if (request.body.id && request.body.id !== decoded.userId) return response.status(401).json({ error: "unauthorized request" });
 
+    request.user = decoded;
+
     next();
   } catch (error) {
     response.status(401).json({ error: error.message | "authorization denied" });

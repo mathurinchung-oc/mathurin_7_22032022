@@ -48,11 +48,21 @@ const slice = {
 
         return post;
       });
+    },
+    setUpdateComment: (state, { payload }) => {},
+    setDeleteComment: (state, { payload }) => {
+      state.all = state.all.map(post => {
+        if (post.id === parseInt(payload.postId)) {
+          return { ...post, Comments: post.Comments.filter(comment => comment.userId !== payload.userId) };
+        }
+
+        return post;
+      });
     }
   }
 };
 
 export const postSlice = createSlice(slice);
 
-export const { setPosts, setCreatePost, setUpdatePost, setDeletePost, setLikePost, setDislikePost, setAddComment } = postSlice.actions;
+export const { setPosts, setCreatePost, setUpdatePost, setDeletePost, setLikePost, setDislikePost, setAddComment, setDeleteComment } = postSlice.actions;
 export default postSlice.reducer;

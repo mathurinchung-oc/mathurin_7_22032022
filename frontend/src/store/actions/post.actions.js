@@ -1,5 +1,5 @@
 import { config, axios } from '../../api';
-import { setPosts, setCreatePost, setDeletePost, setUpdatePost, setLikePost, setDislikePost, setAddComment } from '../features/post.slice';
+import { setPosts, setCreatePost, setDeletePost, setUpdatePost, setLikePost, setDislikePost, setAddComment, setDeleteComment } from '../features/post.slice';
 
 const url = "/post";
 
@@ -51,7 +51,7 @@ const likePost = (postId, userId) => {
   return async dispatch => {
     try {
       const response = await axios.post(`${ url }/${ postId }/like`, { userId }, config);
-      return dispatch(setLikePost(response.data.like));
+      return dispatch(setLikePost(response.data.payload));
     } catch (error) {
       console.error(error.message);
     }
@@ -62,7 +62,7 @@ const dislikePost = (postId, userId) => {
   return async dispatch => {
     try {
       const response = await axios.post(`${url}/${postId}/like`, { userId }, config);
-      return dispatch(setDislikePost(response.data.dislike));
+      return dispatch(setDislikePost(response.data.payload));
     } catch (error) {
       console.error(error.message);
     }
@@ -80,6 +80,17 @@ const createComment = (postId, data) => {
   };
 };
 
-const deleteComment = async (postId) => {};
+const updateComment = async (postId) => {};
 
-export { getAllPosts, createPost, updatePost, deletePost, likePost, dislikePost, createComment, deleteComment }
+const deleteComment = (postId) => {
+  return async dispatch => {
+    try {
+      const response = await axios.delete(`${url}/${postId}/comment`, config);
+      return dispatch(setDeleteComment(response.data.payload));
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+};
+
+export { getAllPosts, createPost, updatePost, deletePost, likePost, dislikePost, createComment, updateComment, deleteComment }
