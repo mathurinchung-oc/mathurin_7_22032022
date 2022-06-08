@@ -75,5 +75,3 @@ exports.deleteUser = async (request, response) => {
     response.status(500).json({ error: error.message });
   }
 };
-
-// https://openclassrooms.com/forum/sujet/on-delete-cascade-sur-cle-primaire-mysql

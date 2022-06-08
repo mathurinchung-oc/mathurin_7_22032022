@@ -10,11 +10,15 @@ module.exports = {
       },
       postId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: 'Posts', key: 'id' },
+        onDelete: 'cascade'
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: 'Users', key: 'id' },
+        onDelete: 'cascade'
       },
       comment: {
         allowNull: false,

@@ -17,12 +17,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Comment.init({
     postId: {
-      type: DataTypes.INTEGER,
-      references: { model: 'Post', key: 'id' }
+      type: DataTypes.INTEGER
     },
     userId: {
-      type: DataTypes.INTEGER,
-      references: { model: 'User', key: 'id' }
+      type: DataTypes.INTEGER
     },
     comment: DataTypes.STRING
   }, {

@@ -1,5 +1,5 @@
 import { config, axios } from '../../api';
-import { setUsers, setCurrentUser, setUpdateUser, setDeleteUser } from '../features/user.slice';
+import { setUsers, setCurrentUser, setUpdateUser } from '../features/user.slice';
 
 const url = "/user";
 
@@ -48,16 +48,4 @@ const modifyPassword = () => {
   };
 };
 
-const deleteUser = (userId) => {
-  return async dispatch => {
-    try {
-      await axios.delete(`${url}/${userId}`, config);
-      dispatch(setDeleteUser(userId));
-      console.log("delete!!!");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
-
-export { getAllUsers, getOneUser, updateUser, modifyEmail, modifyPassword, deleteUser }
+export { getAllUsers, getOneUser, updateUser, modifyEmail, modifyPassword }

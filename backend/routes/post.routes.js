@@ -3,8 +3,7 @@ const router = express.Router();
 
 const { auth, upload } = require('../middlewares');
 
-const { getAllPosts, createPost, updatePost, deletePost, likePost } = require('../controllers/post.controller');
-const { createComment, deleteComment } = require('../controllers/comment.controller');
+const { getAllPosts, createPost, updatePost, deletePost, likePost, createComment, deleteComment } = require('../controllers/post.controller');
 
 router.get('/', auth, getAllPosts);
 router.post('/', auth, upload("posts"), createPost);
@@ -15,8 +14,5 @@ router.post('/:id/like', auth, likePost);
 
 router.post('/:id/comment', auth, createComment);
 router.delete('/:id/comment', auth, deleteComment);
-
-// const {  } = require('../controllers/comment.controller');
-// router.get('/', );
 
 module.exports = router;
