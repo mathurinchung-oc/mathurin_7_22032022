@@ -36,10 +36,16 @@ const updateUser = (userId, data) => {
   }
 };
 
-const modifyEmail = () => {
-  return async dispatch => {
-    try {} catch (error) {}
-  };
+const modifyEmail = async (userId, data) => {
+  // return async dispatch => {
+    try {
+      console.log(data);
+      const response = await axios.put(`${ url }/${userId}/email`, data, config);
+      console.log(response);
+    } catch (error) {
+      console.error(error.message);
+    }
+  // };
 };
 
 const modifyPassword = () => {

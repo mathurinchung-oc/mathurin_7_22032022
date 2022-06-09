@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateComment, deleteComment } from "../../store/actions/post.actions";
-import { Button, ButtonSubmit } from "../Buttons";
+import { Button } from "../Buttons";
 import { FontAwesomeIcon } from "../FontAwesomeIcon";
 
 function CommentCard({ comment }) {
@@ -9,8 +9,6 @@ function CommentCard({ comment }) {
   const { id, admin } = useSelector(state => state.user.currentUser);
   const [ isUpdated, setIsUpdated ] = useState(false);
   const [ commentUpdated, setCommentUpdated ] = useState("");
-
-
 
   const handleUpdateComment = e => {
     e.preventDefault();
@@ -22,7 +20,6 @@ function CommentCard({ comment }) {
   };
 
   const handleCancelUpdate = () => {
-
     setCommentUpdated("");
     setIsUpdated(false);
   };

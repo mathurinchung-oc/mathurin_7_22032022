@@ -4,6 +4,7 @@ function UploadAvatar({ change }) {
   return (
     <FormControl>
       <FormUpload id="avatar" change={ change } />
+      <input type="reset" />
     </FormControl>
   );
 };

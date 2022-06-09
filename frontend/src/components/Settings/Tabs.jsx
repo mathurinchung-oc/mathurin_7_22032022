@@ -27,7 +27,7 @@ function Tabs() {
     <nav className="ToggleNav">
       <ul className="ToggleList">
         <li id="edit-profile" className={"ToggleItem" + (tabUser ? " active" : "")} onClick={ handleToggleTab }>Profile</li>
-        <li id="auth" className={"ToggleItem" + (tabAuth ? " active" : "")} onClick={ handleToggleTab }>Password</li>
+        <li id="auth" className={"ToggleItem" + (tabAuth ? " active" : "")} onClick={ handleToggleTab }>Authentication</li>
         <li id="danger" className={"ToggleItem" + (tabDanger ? " active" : "")} onClick={ handleToggleTab }>Danger</li>
       </ul>
     </nav>

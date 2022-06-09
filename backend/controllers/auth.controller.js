@@ -59,3 +59,33 @@ exports.signin = async (request, response) => {
     response.status(500).json({ error: error.message });
   }
 };
+
+exports.modifyEmail = async (request, response) => {
+  try {
+    if (request.user.userId !== parseInt(request.params.id)) return response.status(401).json({ error: "unauthorized request" });
+
+    const { currentEmail, newEmail } = request.body;
+    if (!currentEmail || !newEmail) return response.status(400).json({ error: "missing parameters" });
+
+    const currentEmailEncrypted = await crypto.encrypt(currentEmail);
+    const userFound = await User.findOne({ attributes: [ 'email' ], where: { id: request.params.id } });
+    if (!userFound) return response.status(404).json({ error: "user not found" });
+    if (userFound.email !== currentEmailEncrypted) return response.status(401).json({ error: "unauthorized request" });
+   
+    const newEmailEncrydted  = await crypto.encrypt(newEmail);
+    const emailFound = await User.findOne({ where: { email: newEmailEncrydted } });
+    if (emailFound) return response.status(409).json({ error: "email already exists" });
+
+    await userFound.update({ email: newEmailEncrydted, id: request.params.id });
+
+    const newEmailDecrypted = await crypto.decrypt(newEmailEncrydted);
+
+    response.status(200).json({ message: "email updated", payload: newEmailDecrypted });
+  } catch (error) {
+    response.status(500).json({ error: error.message });
+  }
+};
+
+exports.modifyPassword = async (request, response) => {
+  
+};

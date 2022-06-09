@@ -1,6 +1,7 @@
 const fs = require('fs');
 const crypto = require('../utils/crypto.util');
 const { User } = require('../models');
+const { request, response } = require('express');
 
 exports.getAllUsers = async (request, response) => {
   try {
@@ -42,10 +43,6 @@ exports.updateUser = async (request, response) => {
   }
 };
 
-exports.modifyEmail = async (request, response) => {};
-
-exports.modifyPassword = async (request, response) => {};
-
 exports.deleteUser = async (request, response) => {
   try {
     const userFound = await User.findOne({ where: { id: request.params.id } });
@@ -75,3 +72,5 @@ exports.deleteUser = async (request, response) => {
     response.status(500).json({ error: error.message });
   }
 };
+
+exports.deleteUserByAdmin = async (request, response) => {};

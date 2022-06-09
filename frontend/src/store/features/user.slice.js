@@ -8,7 +8,7 @@ const slice = {
     setCurrentUser: (state, { payload }) => { state.currentUser = payload },
     setUpdateUser: (state, { payload }) => {
       const { id, fullname, bio, avatar } = payload;
-      state.currentUser = { fullname, bio, avatar, ...state.currentUser };
+      state.currentUser = { ...state.currentUser, fullname, bio, avatar };
       
       state.all = state.all.map(user => {
         if (user.id === parseInt(id)) {
