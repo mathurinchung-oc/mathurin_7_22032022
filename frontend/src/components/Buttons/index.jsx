@@ -8,5 +8,6 @@ import ButtonFollow from './ButtonFollow';
 import ButtonUnfollow from './ButtonUnfollow';
 import ButtonDanger from './ButtonDanger';
 import ButtonClose from './ButtonClose';
+import ButtonDeleteUser from './ButtonDeleteUser';
 
-export { Button, ButtonScrollToTop, ButtonDropMenu, ButtonEditProfile, ButtonSubmit, ButtonLike, ButtonFollow, ButtonUnfollow, ButtonDanger, ButtonClose };
+export { Button, ButtonScrollToTop, ButtonDropMenu, ButtonEditProfile, ButtonSubmit, ButtonLike, ButtonFollow, ButtonUnfollow, ButtonDanger, ButtonClose, ButtonDeleteUser };

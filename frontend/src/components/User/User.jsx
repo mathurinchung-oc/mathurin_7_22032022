@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { Avatar } from '.';
-import { ButtonEditProfile } from '../Buttons';
+import { ButtonEditProfile, ButtonDeleteUser } from '../Buttons';
 
 function User({ user }) {
-  const { id } = useSelector(state => state.user.currentUser);
+  const { id, admin } = useSelector(state => state.user.currentUser);
   const isOwner = user.id === id;
   // const isFollowing = false;
 
@@ -14,7 +14,11 @@ function User({ user }) {
       <Avatar avatar={ user.avatar } />
       <div className="UserInfo">
         <h3 className="DisplayName">{ user.fullname }</h3>
-        { isOwner && <ButtonEditProfile class="btn-user edit-profile" />}
+        { isOwner ?
+          <ButtonEditProfile class="btn-user edit-profile" />
+          :
+          admin && <ButtonDeleteUser />
+        }
         {/* : !isFollowing ? <ButtonFollow /> : <ButtonUnfollow /> */}
       </div>
     </div>

@@ -15,11 +15,14 @@ const slice = {
           return { ...user, fullname, bio, avatar };
         } else return user;
       });
+    },
+    setDeleteUser: (state, { payload }) => {
+      state.all = state.all.filter(user => user.id !== parseInt(payload));
     }
   }
 };
 
 export const usersSlice = createSlice(slice);
 
-export const { setCurrentUser, setUsers, setUpdateUser } = usersSlice.actions;
+export const { setCurrentUser, setUsers, setUpdateUser, setDeleteUser } = usersSlice.actions;
 export default usersSlice.reducer;

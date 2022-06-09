@@ -57,7 +57,7 @@ function Post({ post }) {
     <article className="post">
       <header>
         <Link className="post-user" to={ `/profile/${ post.userId }` }>
-          <Avatar avatar="/images/users/avatar.png" />
+          <Avatar avatar={ post.User.avatar } />
           <h3>{ post.User.fullname }</h3>
         </Link>
         { (admin || id === post.userId) &&
@@ -92,7 +92,7 @@ function Post({ post }) {
             <span>{ post.Comments.length }</span>
           </div>
         </div>
-        <p className="timestamp">{ dateParser(post.updatedAt) }</p>
+        <p className="timestamp">{ dateParser(post.createdAt) }</p>
       </footer>
       {/* { showComment && <CommentCard postId={ post.id } comments={ post.Comments } /> } */}
       { showComment && 

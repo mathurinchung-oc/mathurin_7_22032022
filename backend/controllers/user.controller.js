@@ -45,32 +45,34 @@ exports.updateUser = async (request, response) => {
 
 exports.deleteUser = async (request, response) => {
   try {
-    const userFound = await User.findOne({ where: { id: request.params.id } });
-    if (!userFound) return response.status(404).json({ error: "user not found" });
+    const { userId, role } = request.user;
 
-    const filename = userFound.avatar.split('images/users/')[1];
-    if (filename !== "avatar.png") {
-      fs.unlink(`images/users/${filename}`, async () => {
+    if (parseInt(request.params.id) === userId || role === "admin") {
+      const userFound = await User.findOne({ where: { id: request.params.id } });
+      if (!userFound) return response.status(404).json({ error: "user not found" });
+
+      const filename = userFound.avatar.split('images/users/')[1];
+      if (filename !== "avatar.png") {
+        fs.unlink(`images/users/${filename}`, async () => {
+          try {
+            await User.destroy({ where: { id: request.params.id } });
+
+            response.status(200).json({ message: "user has been deleted" });
+          } catch (error) {
+            response.status(400).json({ error: error.message });
+          }
+        });
+      } else {
         try {
           await User.destroy({ where: { id: request.params.id } });
-    
+
           response.status(200).json({ message: "user has been deleted" });
         } catch (error) {
           response.status(400).json({ error: error.message });
         }
-      });
-    } else {
-      try {
-        await User.destroy({ where: { id: request.params.id } });
-  
-        response.status(200).json({ message: "user has been deleted" });
-      } catch (error) {
-        response.status(400).json({ error: error.message });
       }
     }
   } catch (error) {
     response.status(500).json({ error: error.message });
   }
 };
-
-exports.deleteUserByAdmin = async (request, response) => {};

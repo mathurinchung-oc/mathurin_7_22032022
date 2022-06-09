@@ -31,8 +31,9 @@ function CommentCard({ comment }) {
   return (
     <>
       { !isUpdated ? <div>{ comment.comment }</div> : <textarea value={ commentUpdated } onChange={ e => setCommentUpdated(e.target.value) } /> }
+      { (admin || comment.userId === id) &&
       <div>
-        { (admin || comment.userId === id) && isUpdated ?
+        { isUpdated ?
           <>
             <Button click={ handleUpdateComment } btnTitle="valider" btnValue={ <FontAwesomeIcon icon="fa-solid fa-check" /> } />
             <Button click={ handleCancelUpdate } btnTitle="annuler" btnValue={ <FontAwesomeIcon icon="fa-solid fa-xmark" /> } />
@@ -44,6 +45,7 @@ function CommentCard({ comment }) {
           </>
         }
       </div>
+      }
     </>
   );
 }

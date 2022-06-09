@@ -83,9 +83,7 @@ const createComment = (postId, comment) => {
 const updateComment = (id, data) => {
   return async dispatch => {
     try {
-      console.log(data)
       const response = await axios.put(`${url}/comment/${id}`, { data }, config);
-      console.log(response.data);
       return dispatch(setUpdateComment(response.data.payload));
     } catch (error) {
       console.error(error.message);
