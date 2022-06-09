@@ -3,13 +3,13 @@ const router = express.Router();
 
 const { auth, upload } = require('../middlewares');
 
-const { signup, signin, modifyEmail } = require('../controllers/auth.controller');
+const { signup, signin, modifyEmail, modifyPassword } = require('../controllers/auth.controller');
 const { getAllUsers, getOneUser, updateUser, deleteUser } = require('../controllers/user.controller');
 
 router.post('/register', signup);
 router.post('/login', signin);
 router.put('/:id/email', auth, modifyEmail);
-// router.put(':id/password', modifyPassword);
+router.put('/:id/password', auth, modifyPassword);
 
 router.get('/', auth, getAllUsers);
 router.get('/:id', auth, getOneUser);

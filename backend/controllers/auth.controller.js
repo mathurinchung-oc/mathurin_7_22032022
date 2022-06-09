@@ -80,12 +80,35 @@ exports.modifyEmail = async (request, response) => {
 
     const newEmailDecrypted = await crypto.decrypt(newEmailEncrydted);
 
-    response.status(200).json({ message: "email updated", payload: newEmailDecrypted });
+    response.status(200).json({ message: "email updated" });
   } catch (error) {
     response.status(500).json({ error: error.message });
   }
 };
 
 exports.modifyPassword = async (request, response) => {
-  
+  try {
+    if (request.user.userId !== parseInt(request.params.id)) return response.status(401).json({ error: "unauthorized request" });
+
+    const { currentPassword, newPassword } = request.body;
+    if (!currentPassword || !newPassword) return response.status(400).json({ error: "missing parameters" });
+
+    const userFound = await User.findOne({ attributes: [ 'password' ], where: { id: request.params.id } });
+    if (!userFound) return response.status(404).json({ error: "user not found" });
+
+    const validPassword = await bcrypt.compare(currentPassword, userFound.password);
+    if (!validPassword) return response.status(401).json({ error: "invalid password" });
+
+    const isValidPassword = isvalid.password(newPassword);
+    if (!isValidPassword) return response.status(400).json({ error: "invalid password" });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(newPassword, salt);
+
+    await userFound.update({ password: hashPassword, id: request.params.id });
+
+    response.status(200).json({ message: "password updated" });
+  } catch (error) {
+    response.status(500).json({ error: error.message });
+  }
 };

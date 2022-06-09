@@ -10,6 +10,10 @@ function TabAuth() {
   const [ newEmail, setNewEmail ] = useState("");
   const [ confirmEmail, setConfirmEmail ] = useState("");
 
+  const [ currentPassword, setCurrentPassword ] = useState("");
+  const [ newPassword, setNewPassword ] = useState("");
+  const [ confirmPassword, setConfirmPassword ] = useState("");
+
   const handleEmail = e => {
     e.preventDefault();
 
@@ -28,9 +32,16 @@ function TabAuth() {
   const handlePassword = e => {
     e.preventDefault();
 
-    modifyPassword();
+    if (newPassword !== confirmPassword) return;
+    if(currentPassword === newPassword) return;
 
-    console.log(e);
+    const data = { currentPassword, newPassword };
+
+    modifyPassword(currentUser.id, data);
+
+    setCurrentPassword("")
+    setNewPassword("");
+    setConfirmPassword("");
   };
 
   return (
@@ -54,13 +65,13 @@ function TabAuth() {
       <Form class="UserForm" submit={ handlePassword }>
         <h4>Password</h4>
         <FormControl label="current password">
-          <FormInput />
+          <FormInput id="currentPassword" type="text" value={ currentPassword } change={ e => setCurrentPassword(e.target.value) } />
         </FormControl>
         <FormControl label="new password">
-          <FormInput />
+          <FormInput id="newPassword" type="text" value={ newPassword } change={ e => setNewPassword(e.target.value) } />
         </FormControl>
         <FormControl label="confirm password">
-          <FormInput />
+          <FormInput id="confirmPassword" type="text" value={ confirmPassword } change={ e => setConfirmPassword(e.target.value) } />
         </FormControl>
         <ButtonSubmit value="Submit" />
       </Form>

@@ -37,21 +37,20 @@ const updateUser = (userId, data) => {
 };
 
 const modifyEmail = async (userId, data) => {
-  // return async dispatch => {
-    try {
-      console.log(data);
-      const response = await axios.put(`${ url }/${userId}/email`, data, config);
-      console.log(response);
-    } catch (error) {
-      console.error(error.message);
-    }
-  // };
+  try {
+    await axios.put(`${ url }/${userId}/email`, data, config);
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
-const modifyPassword = () => {
-  return async dispatch => {
-    try {} catch (error) {}
-  };
+const modifyPassword = async (userId, data) => {
+  try {
+    const response = await axios.put(`${ url }/${userId}/password`, data, config);
+    console.log( response);
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 export { getAllUsers, getOneUser, updateUser, modifyEmail, modifyPassword }
