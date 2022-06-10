@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { updateComment, deleteComment } from "../../store/actions/post.actions";
 import { Button } from "../Buttons";
 import { FontAwesomeIcon } from "../FontAwesomeIcon";
+import { Avatar } from "../User";
 
 function CommentCard({ comment }) {
   const dispatch = useDispatch();
   const { id, admin } = useSelector(state => state.user.currentUser);
   const [ isUpdated, setIsUpdated ] = useState(false);
-  const [ commentUpdated, setCommentUpdated ] = useState("");
+  const [ commentUpdated, setCommentUpdated ] = useState(comment.comment);
 
   const handleUpdateComment = e => {
     e.preventDefault();
@@ -20,7 +22,7 @@ function CommentCard({ comment }) {
   };
 
   const handleCancelUpdate = () => {
-    setCommentUpdated("");
+    setCommentUpdated(comment.comment);
     setIsUpdated(false);
   };
 
@@ -30,22 +32,34 @@ function CommentCard({ comment }) {
 
   return (
     <>
-      { !isUpdated ? <div>{ comment.comment }</div> : <textarea value={ commentUpdated } onChange={ e => setCommentUpdated(e.target.value) } /> }
-      { (admin || comment.userId === id) &&
-      <div>
-        { isUpdated ?
-          <>
-            <Button click={ handleUpdateComment } btnTitle="valider" btnValue={ <FontAwesomeIcon icon="fa-solid fa-check" /> } />
-            <Button click={ handleCancelUpdate } btnTitle="annuler" btnValue={ <FontAwesomeIcon icon="fa-solid fa-xmark" /> } />
-          </>
-          :
-          <>
-            <Button click={ () => setIsUpdated(!isUpdated) } btnTitle="modifier" btnValue={ <FontAwesomeIcon icon="fa-solid fa-pen" /> } />
-            <Button click={ () => handleDeleteComment(comment.id) } btnTitle="supprimer" btnValue={ <FontAwesomeIcon icon="fa-solid fa-trash-can" /> } />
-          </>
-        }
+      <div className="content">
+        <Link to={ "/profile/" + comment.userId }>
+          <Avatar avatar={ comment.User.avatar } />
+        </Link>
+        <div className="comment">
+          <h3 className="fullname"> { comment.User.fullname }</h3>
+          { !isUpdated ? <p className="content">{ comment.comment }</p>
+                       : <textarea className="textarea content" value={ commentUpdated } onChange={ e => setCommentUpdated(e.target.value) } /> }
+        </div>
       </div>
-      }
+
+      { (admin || comment.userId === id) &&
+      <div className="CommentMenu">
+      { isUpdated ? <>
+        <Button className="submit" click={ handleUpdateComment } title="valider">
+          <FontAwesomeIcon icon="fa-solid fa-check" />
+        </Button>
+        <Button className="cancel" click={ handleCancelUpdate } btnTitle="annuler">
+          <FontAwesomeIcon icon="fa-solid fa-xmark" />
+        </Button>
+        </> : <>
+        <Button className="modify" title="modifier" click={ () => setIsUpdated(!isUpdated) }>
+          <FontAwesomeIcon icon="fa-solid fa-pen" />
+        </Button>
+        <Button className="delete" title="supprimer" click={ () => handleDeleteComment(comment.id) }>
+          <FontAwesomeIcon icon="fa-solid fa-trash-can" />
+        </Button> </> }
+      </div> }
     </>
   );
 }

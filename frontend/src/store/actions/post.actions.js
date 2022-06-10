@@ -18,7 +18,7 @@ const createPost = (data) => {
   return async dispatch => {
     try {
       const response = await axios.post(url, data, config);
-      return dispatch(setCreatePost(response.data.post));
+      return dispatch(setCreatePost(response.data.payload));
     } catch (error) {
       console.error(error.message);
     }
@@ -47,11 +47,13 @@ const deletePost = (postId) => {
   };
 };
 
+const deleteAttachment = () => {};
+
 const likePost = (postId, userId) => {
   return async dispatch => {
     try {
-      const response = await axios.post(`${ url }/${ postId }/like`, { userId }, config);
-      return dispatch(setLikePost(response.data.payload));
+      await axios.post(`${ url }/${ postId }/like`, { userId }, config);
+      return dispatch(setLikePost({ postId, userId }));
     } catch (error) {
       console.error(error.message);
     }
@@ -61,8 +63,8 @@ const likePost = (postId, userId) => {
 const dislikePost = (postId, userId) => {
   return async dispatch => {
     try {
-      const response = await axios.post(`${url}/${postId}/like`, { userId }, config);
-      return dispatch(setDislikePost(response.data.payload));
+      await axios.post(`${url}/${postId}/like`, { userId }, config);
+      return dispatch(setDislikePost({ postId, userId }));
     } catch (error) {
       console.error(error.message);
     }
@@ -73,7 +75,7 @@ const createComment = (postId, comment) => {
   return async dispatch => {
     try {
       const response = await axios.post(`${url}/${postId}/comment`, comment, config);
-      return dispatch(setAddComment(response.data.newComment));
+      return dispatch(setAddComment(response.data.payload));
     } catch (error) {
       console.error(error.message);
     }
@@ -102,4 +104,4 @@ const deleteComment = (id) => {
   };
 };
 
-export { getAllPosts, createPost, updatePost, deletePost, likePost, dislikePost, createComment, updateComment, deleteComment }
+export { getAllPosts, createPost, updatePost, deletePost, deleteAttachment, likePost, dislikePost, createComment, updateComment, deleteComment }

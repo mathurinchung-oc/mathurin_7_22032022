@@ -3,21 +3,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { createPost } from '../../store/actions/post.actions';
 import { Avatar } from '../User';
-import { Form, FormControl, FormUpload } from '../Form';
-// import { FontAwesomeIcon } from '../FontAwesomeIcon';
-import { Button, ButtonSubmit } from '../Buttons';
+import { Form, FormUpload } from '../Form';
+import { Button } from '../Buttons';
 
 function EditPost() {
   const dispatch = useDispatch();
-  const { id, avatar, admin } = useSelector(state => state.user.currentUser);
+  const { id, fullname, avatar } = useSelector(state => state.user.currentUser);
   const [ content, setContent ] = useState("");
-  const [ attachment, setAttachment ] = useState(null);
   const [ file, setFile ] = useState();
+  const [ preview, setPreview ] = useState();
+
+  const handleAttachment = e => {
+    e.preventDefault();
+
+    setFile(e.target.files[0]);
+    setPreview(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const cancelAttachment = () => {
+    setPreview();
+    setFile();
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (content || attachment) {
+    if (content || file) {
       const data = new FormData();
       data.append('UserId', id);
       data.append('content', content);
@@ -26,43 +37,42 @@ function EditPost() {
       dispatch(createPost(data));
 
       setContent("");
-      setAttachment("");
       setFile("");
     }
   };
 
-  const handleAttachment = e => {
-    setAttachment(URL.createObjectURL(e.target.files[0]));
-    setFile(e.target.files[0]);
-  };
-
-  const cancelPost = () => {
-    setContent("");
-    setAttachment("");
-    setFile("");
-  };
-
   return (
-    <div id="EditPost">
-      { !admin &&
+    <div className="EditPost">
       <div className="wrapper">
-        <Link to={`/profile/${ id }`}>
-          <Avatar avatar={ avatar } />
-        </Link>
-        <Form class="EditPostForm" submit={ handleSubmit }>
-          <FormControl for="content" label="content">
-            <textarea id="content" name="content" type="text" value={ content } placeholder="What's happening?" onChange={ e => setContent(e.target.value) } />
-          </FormControl>
+        <header className="PostHeading">
+          <Link className="PostUserLink" to={ `/profile/${ id }` }>
+            <Avatar avatar={ avatar } />
+            <div className="PostUserHeading">
+              <h3 className="fulname">{ fullname }</h3>
+              <h4 className="job">{ "job" }</h4>
+            </div>
+          </Link>
+        </header>
 
-          <div className="btn-form">
-            {/* <Button btnType="attachment" btnValue={[ <FontAwesomeIcon key="attachment" icon="fa-solid fa-camera" />, " Image" ]} /> */}
-            <FormUpload change={ e => handleAttachment(e) } />
-            { content || attachment ? <Button click={ cancelPost } btnValue="Cancel" /> : null }
-            <ButtonSubmit value="Post" />
-          </div>
+        <Form class="EditPostForm" submit={ handleSubmit }>
+
+          <figure className="PostBody">
+            { file ? <img className="attachment" src={ preview } alt="preview attachment" /> : null }
+            <figcaption>
+              {/* <label htmlFor="content"></label> */}
+              <textarea id="content" className="textarea content" value={ content } placeholder="Quoi de neuf ?" onChange={ e => setContent(e.target.value) } />
+            </figcaption>
+          </figure>
+
+          <footer className="PostFooter">
+            <div className="PostIsUpdated">
+              { !file ? <FormUpload id="upload" change={ handleAttachment } />
+                      : <Button type="secondary cancel" click={ cancelAttachment }>Supprimer l'image</Button> }
+              <Button type="submit">Publier</Button>
+            </div>
+          </footer>
         </Form>
       </div>
-      }
     </div>
   );
 }

@@ -7,10 +7,14 @@ exports.getAllPosts = async (request, response) => {
       attributes: [ 'id', 'userId', 'content', 'attachment', 'createdAt' ],
       include: [
         { model: User, attributes: [ 'id', 'fullname', 'avatar' ] },
-        { model: Like, attributes: [ 'userId', 'postId' ] },
-        { model: Comment, attributes: [ 'id', 'userId', 'postId', 'comment', 'updatedAt' ] },
+        { model: Like, attributes: [ 'id', 'userId', 'postId' ] },
+        { model: Comment,
+          attributes: [ 'id', 'userId', 'postId', 'comment', 'createdAt' ],
+          include: [ { model: User, attributes: [ 'id', 'fullname', 'avatar' ] } ],
+          order: [ [ 'createdAt', 'DESC' ] ]
+        },
       ],
-      order: [ [ Comment, 'updatedAt', 'DESC' ] ]
+      order: [ [ 'createdAt', 'DESC' ] ]
     });
 
     response.status(200).json(posts);
@@ -24,10 +28,9 @@ exports.createPost = async (request, response) => {
     const postObject = request.file ? { ...request.body, attachment: `/${ request.file.path }` } : { ...request.body };
 
     const newPost = await Post.create({ ...postObject });
-    console.log(newPost.id)
 
-    const post = await Post.findOne({
-      attributes: [ 'id', 'userId', 'content', 'attachment', 'updatedAt' ],
+    const payload = await Post.findOne({
+      attributes: [ 'id', 'userId', 'content', 'attachment', 'createdAt' ],
       include: [
         { model: User, attributes: [ 'id', 'fullname', 'avatar' ] },
         { model: Like, attributes: [ 'userId', 'postId' ] },
@@ -36,7 +39,7 @@ exports.createPost = async (request, response) => {
       where: { id: newPost.id }
     });
 
-    response.status(201).json({ message: "post successfully created!", post });
+    response.status(201).json({ message: "post successfully created!", payload });
   } catch (error) {
     response.status(400).json({ error: error.message });
   }
@@ -119,7 +122,15 @@ exports.createComment = async (request, response) => {
     const postId = postFound.id;
     const newComment = await Comment.create({ userId, postId, comment })
 
-    response.status(201).json({ message: "comment successfully created!", newComment });
+    const payload = await Comment.findOne({
+      attributes: [ 'id', 'userId', 'postId', 'comment', 'createdAt' ],
+      include: [
+        { model: User, attributes: [ 'id', 'fullname', 'avatar' ] }
+      ],
+      where: { id: newComment.id }
+    });
+
+    response.status(201).json({ message: "comment successfully created!", payload });
   } catch (error) {
     response.status(400).json({ error: error.message });
   }

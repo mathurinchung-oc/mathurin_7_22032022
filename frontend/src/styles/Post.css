@@ -1,4 +1,4 @@
-.post {
+.Post {
   margin: 0 auto 15px;
   width: 768px;
   max-width: 100%;
@@ -6,174 +6,280 @@
   box-shadow: 0 3px 15px #0000001a;
 }
 
-li:last-child .post {
+.textarea {
+  overflow: hidden;
+  line-break: auto;
+  border: none;
+  width: 100%;
+  height: 57px;
+  resize: none;
+  line-height: 1.5;
+}
+
+.Post .btn {
+  background-color: inherit;
+}
+
+li:last-child .Post {
   margin-bottom: 60px;
 }
 
-.post header {
+.PostHeading {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 15px;
 }
 
-.post-user {
+.PostUserLink {
   display: flex;
-  color: #444;
 }
 
-.post h3 {
-  margin-left: 5px;
-  color: #666;
-  font-size: 15px;
+.PostHeading .Avatar {
+  margin-right: 20px;
 }
 
-.post .btn-menu {
+.PostUserHeading {
+  color: #4e5166;
+}
+
+.PostUserHeading .fullname {
+  margin-bottom: 5px;
+}
+
+.PostButtonMenu {
   margin-right: 10px;
-  border: none;
-  background-color: inherit;
-  cursor: pointer;
 }
 
-.post-body {
+
+.PostMenu .btn {
+  margin-left: 15px;
+}
+
+.PostMenu .btn:last-child {
+  margin-right: 10px;
+}
+
+.PostMenu .btn.modify:hover {
+  color: #0065fc;
+}
+
+.PostMenu .btn.delete:hover {
+  color: #fd2d01;
+}
+
+.PostMenu .btn.cancel:hover {
+  color: #4e5166;
+}
+
+
+.PostBody {
   max-width: 100%;
 }
 
-.post-body img {
+.PostBody .attachment {
   width: 100%;
   max-height: 576px;
   object-fit: cover;
 }
 
-.post-content {
+.PostBody .content {
   padding: 15px;
-  font-size: 14px;
+  color: #4e5166;
+  font-size: 18px;
   line-height: 1.5;
 }
 
-.post footer {
-  padding: 10px 20px 15px;
+
+.PostFooter {
+  padding: 10px 20px 20px;
 }
 
-.post-icons {
+.PostIcons {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.post-icon {
+.PostIcon {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.post-icon i {
+.PostIcon .btn {
   font-size: 20px;
   cursor: pointer;
 }
 
-.post-icon i:hover {
+.PostIcon .btn:hover {
   color: #666;
 }
 
-.post-icon span {
+.PostIcon .fa-solid.fa-heart {
+  color: #fd2201;
+}
+
+.PostIcon .fa-regular.fa-heart:hover {
+  color: #fd2201;
+}
+
+.PostIcon .fa-solid.fa-comment {
+  color: #4e5166;
+}
+
+.PostIcon .fa-regular.fa-comment:hover {
+  color: #4e5166;
+}
+
+.PostIcon span {
   margin-left: 7px;
 }
 
-.post .timestamp {
-  color: #999;
+.Post .timestamp {
+  color: #4e5166;
   font-size: 12px;
+  text-align: right;
   text-transform: uppercase;
 }
 
+
+.PostIsUpdated {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.PostIsUpdated .btn {
+  padding: 7px 15px;
+}
+
+.PostIsUpdated .btn.submit {
+  margin-left: 10px;
+  background-color: #0065fc;
+  color: #fff;
+}
+
+.PostIsUpdated .btn.secondary {
+  background-color: #ddd;
+}
+
+
+
+.PostComments {
+  border-top: 1px solid #eee;
+  padding: 15px;
+}
+
+.CommentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0 10px;
+  border-radius: 15px;
+  padding: 15px;
+  background-color: #eee;
+  font-size: 14px;
+}
+
+.CommentItem .content {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.CommentItem .Avatar {
+  margin-right: 15px;
+  width: 25px;
+  height: 25px;
+}
+
+.CommentItem .comment {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  width: 100%;
+}
+
+.CommentItem .comment .fullname {
+  margin-right: 10px;
+}
+
+.CommentItem .comment .content {
+  text-align: left;
+}
+
+.CommentItem .textarea {
+  height: 20px;
+  background-color: #ddd;
+}
+
+.CommentMenu {
+  display: flex;
+}
+
+.CommentMenu .btn {
+  color: #eee;
+}
+
+.CommentItem:hover .btn {
+  color: #4e5166;
+}
+
+.CommentItem .btn:last-child {
+  margin-left: 5px;
+}
+
 @media screen and (min-width: 769px) {
-  .post {
+  .Post {
     border: 1px solid #ddd;
     border-radius: 10px;
   }
 }
 
-#EditPost {
-  height: 100vh;
-  background-color: #fff;
-}
 
-#EditPost .wrapper {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  margin: auto;
-  padding: 60px 15px 0;
+.EditPost {
+  padding-top: 50px;
   width: 768px;
   max-width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: 0 3px 15px #0000001a;
 }
 
-#EditPost form {
-  flex-grow: 2;
-  margin-left: 15px;
-}
-
-#EditPost label {
-  display: block;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 7px;
-}
-
-#EditPost label::after {
-  content: attr(data-replidated-value) "";
-  white-space: pre-wrap;
-  visibility: hidden;
-}
-
-#EditPost label:focus-within {
-  border: 1px solid #bbb;
-}
-
-#EditPost textarea {
-  overflow: hidden;
-  line-break: auto;
-  border: none;
+.EditPost .content {
   width: 100%;
-  height: auto;
-  resize: none;
 }
 
-#EditPost textarea:focus {
+.EditPost .textarea.content:focus {
   outline: none;
 }
 
-#EditPost .btn-form {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
+.EditPost .btn.upload {
+  display: inline-block;
+  text-align: center;
 }
 
-#EditPost .btn  {
-  border-radius: 5px;
-  padding: 5px;
-  width: 85px;
-}
-
-#EditPost .btn:last-child {
+.EditPost .btn.cancel .fa-xmark {
   margin-left: 5px;
 }
 
-@media screen and (min-width: 992px) {
-  #EditPost .wrapper {
-    padding-top: 90px;
+@media screen and (min-width: 540px) {
+  .EditPost {
+    margin: 50px auto 25px;
+    padding: 0;
+    height: auto;
+    background-color: #fff;
+    box-shadow: 0 3px 15px #0000001a;
   }
 }
 
 @media screen and (min-width: 992px) {
-  #EditPost {
-    display: block;
+  .EditPost {
     margin: 15px auto 25px;
     border-radius: 10px;
-    padding: 15px;
+    padding: 0;
     background-color: #fff;
     box-shadow: 0 3px 15px #0000001a;
-  }
-  
-  #EditPost header {
-    display: flex;
-    height: 50px;
   }
 }

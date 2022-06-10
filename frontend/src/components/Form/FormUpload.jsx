@@ -1,10 +1,12 @@
-function FormUpload(props) {
-  const classes = [ "FormInput" ];
-  classes.push(props.class);
+import { FontAwesomeIcon } from "../FontAwesomeIcon";
 
+function ButtonUpload(props) {
   return (
-    <input id={ props.id } className={ classes[1] ? classes.join(" ") : classes.join("") } name={ props.id } type="file" accept=".jpg, .jpeg, .png, .gif" placeholder={ props.placeholder } value={ props.value } onChange={ props.change } />
+    <div className="ButtonUpload">
+      <label htmlFor={ props.id } className="btn secondary upload"><FontAwesomeIcon icon="fa-solid fa-camera" /> Image</label>
+      <input id={ props.id } name={ props.id } type="file" accept="image/*f" onChange={ props.change } hidden />
+    </div>
   );
 }
 
-export default FormUpload;
+export default ButtonUpload;

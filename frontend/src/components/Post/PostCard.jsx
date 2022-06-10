@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePost, deletePost, createComment } from '../../store/actions/post.actions';
+import { updatePost, deletePost, deleteAttachment, createComment } from '../../store/actions/post.actions';
+import { dislikePost, likePost } from "../../store/actions/post.actions";
 import { Link } from 'react-router-dom';
 import { baseURL } from '../../api';
 import { CommentCard } from '.';
-import { Button, ButtonLike, ButtonSubmit } from '../Buttons';
+import { Button } from '../Buttons';
 import { Form, FormUpload } from '../Form';
 import { FontAwesomeIcon } from '../FontAwesomeIcon';
 import { Avatar } from '../User';
@@ -12,36 +13,86 @@ import { isEmpty, dateParser } from '../../utils';
 
 function Post({ post }) {
   const dispatch = useDispatch();
-  const { admin, id } = useSelector(state => state.user.currentUser);
+  const { admin, id, fullname, avatar } = useSelector(state => state.user.currentUser);
+
   const [ showMenu, setShowMenu ] = useState(false);
-  const [ showComment, setShowComment ] = useState(false);
-  const [ comment, setComment ] = useState("");
   const [ isUpdated, setIsUpadted ] = useState(false);
-  const [ contentUpdate, setContentUpdate ] = useState("");
-  const [ attachmentUpdate, setAttachmentUpdate ] = useState("");
+  const [ showComment, setShowComment ] = useState(false);
+  
+  const [ content, setContent ] = useState(post.content);
+  const [ attachment, setAttachment ] = useState(post.attachment);
+  const [ file, setFile ] = useState();
+  const [ preview, setPreview ] = useState();
+  const [ liked, setLiked ] = useState(false);
+  const [ comment, setComment ] = useState("");
+
+  // const handlePreviewFile = () => {
+  //   const preview = document.querySelector('img');
+  //     const file = document.querySelector('input[type=file]').files[0];
+  //     const reader = new FileReader();
+
+  //     reader.onload(() => {
+  //       preview.src = reader.result;
+  //     }, false);
+
+  //     if (file) {
+  //       reader.readAsDataURL(file);
+  //     }
+  // }
+
+  const handleCancelButton = () => {
+    setContent(post.content);
+    setAttachment(post.attachment);
+    setFile();
+    setPreview();
+    setIsUpadted(false)
+    setShowMenu(false);
+  };
+
+  const handleAttachment = e => {
+    e.preventDefault();
+
+    setFile(e.target.files[0]);
+    setPreview(URL.createObjectURL(e.target.files[0]));
+    setAttachment(file);
+  };
+
+  const cancelAttachment = () => {
+    if (post.attachment) {
+      dispatch(deleteAttachment(post.id))
+    }
+
+    setPreview();
+    setFile();
+  };
 
   const handleUpdatePost = e => {
     e.preventDefault();
-    
+
+    if (content === "" && attachment === null) return handleDeletePost();
+
     const data = new FormData();
-    contentUpdate && data.append("content", contentUpdate);
-    attachmentUpdate && data.append("file", attachmentUpdate);
+    data.append("content", content);
+    attachment && data.append("file", file);
 
     dispatch(updatePost(post.id, data));
-    
+
     setIsUpadted(false);
-    
-    setContentUpdate("");
-    setAttachmentUpdate("");
+    setShowMenu(false);
   };
 
   const handleDeletePost = () => {
-    dispatch(deletePost(post.id, id));
+    dispatch(deletePost(post.id));
   };
 
-  const handleCancelButton = () => {
-    setIsUpadted(false);
-    setShowMenu(false);
+  const handleLike = () => {
+    if (!liked) {
+      dispatch(likePost(post.id, id));
+    } else {
+      dispatch(dislikePost(post.id, id));
+    }
+
+    setLiked(!liked)
   };
 
   const handleSubmitComment = e => {
@@ -53,62 +104,107 @@ function Post({ post }) {
     setComment("");
   };
 
+  useEffect(() => {
+    post.Likes.map(user => (user.userId === id) && setLiked(true));
+  }, [ post, id ]);
+
   return (
-    <article className="post">
-      <header>
-        <Link className="post-user" to={ `/profile/${ post.userId }` }>
+    <article className="Post">
+      <header className="PostHeading">
+        <Link className="PostUserLink" to={ `/profile/${ post.userId }` }>
           <Avatar avatar={ post.User.avatar } />
-          <h3>{ post.User.fullname }</h3>
+          <div className="PostUserHeading">
+            <h3 className="fulname">{ post.User.fullname }</h3>
+            <h4 className="job">{ post.User.job }</h4>
+          </div>
         </Link>
-        { (admin || id === post.userId) &&
-          !showMenu &&
-          <button className="btn-menu" onClick={ () => setShowMenu(!showMenu) }><FontAwesomeIcon icon="fa-solid fa-ellipsis" /></button> }
-        { showMenu &&
-        <div className="post-menu">
-          <Button btnTitle="Modifier" btnValue={ <FontAwesomeIcon icon="fa-solid fa-pen" /> } click={ () => setIsUpadted(!isUpdated) } />
-          <Button btnTitle="Supprimer" btnValue={ <FontAwesomeIcon icon="fa-solid fa-trash-can" /> } click={ handleDeletePost } />
-          <Button btnTitle="Annuler" btnValue={ <FontAwesomeIcon icon="fa-solid fa-xmark" /> }  click={ handleCancelButton } />
-        </div>
+
+        { (admin || id === post.userId) && !showMenu &&
+          <Button type="PostButtonMenu" click={ () => setShowMenu(!showMenu) }>
+            <FontAwesomeIcon icon="fa-solid fa-ellipsis" />
+          </Button>
+        }
+        { (showMenu && !isUpdated) &&
+          <div className="PostMenu">
+            <Button type="modify" title="Modifier" click={ () => setIsUpadted(!isUpdated) }>
+              <FontAwesomeIcon icon="fa-solid fa-pen" />
+            </Button>
+
+            <Button type="delete" title="Supprimer" click={ handleDeletePost } >
+              <FontAwesomeIcon icon="fa-solid fa-trash-can" />
+            </Button>
+
+            <Button type="cancel" title="Annuler"  click={ handleCancelButton } >
+              <FontAwesomeIcon icon="fa-solid fa-xmark" />
+            </Button>
+          </div>
         }
       </header>
 
-      <figure className="post-body">
-        { isUpdated === false ? ( !post.attachment ? null : <img src={ baseURL + post.attachment } alt="post attachment" />) : <FormUpload change={ e => setAttachmentUpdate(e.target.files[0]) } /> }
-        <figcaption>
-          { isUpdated === false ? <p className="post-content">{ post.content }</p>
-            : <div><textarea value={ contentUpdate } onChange={ e => setContentUpdate(e.target.value) } /></div>}
-        </figcaption>
-        { isUpdated && <ButtonSubmit btnType=".submit" value="Submit" click={ handleUpdatePost } /> }
+      <figure className="PostBody">
+          { isUpdated ? file ? <img className="attachment" src={ preview } alt="preview attachment" /> : null
+                      : post.attachment && <img className="attachment" src={ baseURL + post.attachment } alt="post attachment" /> }
+
+          <figcaption>
+            { isUpdated ? <textarea id="content" className="textarea content" value={ content } placeholder="Quoi de neuf ?" onChange={ e => setContent(e.target.value) } />
+                        : post.content && <p className="content">{ post.content }</p> }
+          </figcaption>
       </figure>
 
-      <footer>
-        <div className="post-icons">
-          <div className="post-icon">
-            <ButtonLike post={ post } />
-            <span>{ post.Likes.length }</span>
+      <footer className="PostFooter">
+        { !isUpdated ? <>
+          <div className="PostIcons">
+            <div className="PostIcon">
+              <Button type="like" click={ handleLike }>
+              { liked ? <FontAwesomeIcon icon="fa-solid fa-heart" />
+                      : <FontAwesomeIcon icon="fa-regular fa-heart" /> }
+              </Button>
+              <span>{ post.Likes.length }</span>
+            </div>
+            <div className="PostIcon">
+              <Button type="comment" click={ () => setShowComment(!showComment) }>
+                { showComment ? <FontAwesomeIcon icon="fa-solid fa-comment" />
+                              : <FontAwesomeIcon icon="fa-regular fa-comment" /> }
+              </Button>
+              <span>{ post.Comments.length }</span>
+            </div>
           </div>
-          <div className="post-icon">
-            <Button click={ () => setShowComment(!showComment) } btnValue={ showComment ? <FontAwesomeIcon icon="fa-solid fa-comment" /> : <FontAwesomeIcon icon="fa-regular fa-comment" /> } />
-            <span>{ post.Comments.length }</span>
-          </div>
-        </div>
-        <p className="timestamp">{ dateParser(post.createdAt) }</p>
+          <p className="timestamp">{ dateParser(post.createdAt) }</p>
+        </> :
+        <div className="PostIsUpdated">
+          { !file ? <FormUpload id="upload-update-post" change={ handleAttachment } />
+                  : <Button type="secondary" click={ cancelAttachment }>Supprimer l'image</Button>
+          }
+          <Button type="submit" click={ handleUpdatePost }>Publier</Button>
+        </div> }
       </footer>
-      {/* { showComment && <CommentCard postId={ post.id } comments={ post.Comments } /> } */}
+
       { showComment && 
-      <div className="Comments">
-        <Form submit={ handleSubmitComment }>
-          <textarea placeholder="comment" value={ comment } onChange={ e => setComment(e.target.value) } />
-          <ButtonSubmit value="Submit" />
+      <div className="PostComments">
+        <Form class="CommentItem" submit={ handleSubmitComment }>
+          <div className="content">
+            <Link to={ "/profile/" + id }>
+              <Avatar avatar={ avatar } />
+            </Link>
+            <div className="comment">
+              <h3 className="fullname"> { fullname }</h3>
+              <textarea className="textarea content" value={ comment } onChange={ e => setComment(e.target.value) } />
+            </div>
+          </div>
+
+          <div className="CommentMenu">
+            <Button className="submit" title="valider">
+              <FontAwesomeIcon icon="fa-solid fa-check" />
+            </Button>
+          </div>
         </Form>
         { !isEmpty(post.Comments[0]) ?
           <ul className="CommentList">
-            { post.Comments.map(comment => <li key={ comment.id }><CommentCard key={ comment.id } comment={ comment } /></li> ) }
+            { post.Comments.map(comment => <li className="CommentItem" key={ comment.id }><CommentCard comment={ comment } /></li> ) }
           </ul>
           : null
         }
-      </div>
-      }
+      </div> }
     </article>
   );
 }

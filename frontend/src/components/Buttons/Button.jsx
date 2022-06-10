@@ -1,6 +1,6 @@
 function Button(props) {
   return (
-    <button className={ "btn " + props.btnType } title={ props.btnTitle } onClick={ props.click }>{ props.btnValue }</button>
+    <button className={ "btn " + props.type } title={ props.title } onClick={ props.click }>{ props.children }</button>
   );
 }
 

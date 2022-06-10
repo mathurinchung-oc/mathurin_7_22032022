@@ -23,7 +23,9 @@ function ScrollToTop() {
   }
 
   return (
-    <Button btnType="scroll-to-top display-none" btnTitle="Go to top" btnValue={ <FontAwesomeIcon icon="fa-solid fa-chevron-up" /> } click={ handleScrollToTop } />
+    <Button type="scroll-to-top display-none" title="Go to top" click={ handleScrollToTop }>
+      <FontAwesomeIcon icon="fa-solid fa-chevron-up" />
+    </Button>
   );
 }
 

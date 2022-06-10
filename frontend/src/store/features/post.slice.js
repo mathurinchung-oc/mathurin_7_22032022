@@ -16,7 +16,8 @@ const slice = {
           return {
             ...post,
             content: payload.content,
-            attachment: payload.attachment
+            attachment: payload.attachment,
+            createdAt: payload.createdAt
           };
         }
 
@@ -26,17 +27,17 @@ const slice = {
     setDeletePost: (state, { payload }) => { state.all = state.all.filter(post => post.id !== payload.postId) },
     setLikePost: (state, { payload }) => {
       state.all = state.all.map(post => {
-        if (post.id === parseInt(payload.postId)) {
+        if (post.id === payload.postId) {
           return { ...post, Likes: [ payload, ...post.Likes ] };
-      }
+        }
 
         return post;
       });
     },
     setDislikePost: (state, { payload }) => {
       state.all = state.all.map(post => {
-        if (post.id === parseInt(payload.postId)) {
-          return { ...post, Likes: post.Likes.filter(like => like.userId !== payload.userId) };
+        if (post.id === payload.postId) {
+          return { ...post, Likes: post.Likes.filter(like => like.userId !== payload.userId) }
         }
 
         return post;

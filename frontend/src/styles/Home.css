@@ -1,40 +1,33 @@
-#Home #EditPost {
+#Home .EditPost {
   display: none;
 }
 
-#Home li:first-child .post {
+#Home li:first-child .Post {
   margin-top: 45px;
 }
 
 @media screen and (min-width: 540px) {
-  #Home #EditPost {
+  #Home .EditPost {
     display: block;
-    margin: 50px auto 25px;
-    padding: 10px;
-    width: 768px;
-    max-width: 100%;
-    height: auto;
-    background-color: #fff;
-    box-shadow: 0 3px 15px #0000001a;
   }
 
-  #Home #EditPost .wrapper {
+  /* #Home .EditPost .wrapper {
     padding: 15px;
-  }
+  } */
 
-  #Home li:first-child .post {
+  #Home li:first-child .Post {
     margin-top: 0;
   }
 }
 
 @media screen and (min-width: 769px) {
-  #Home #EditPost {
+  #Home .EditPost {
     border-radius: 10px;
   }
 }
 
 @media screen and (min-width: 992px) {
-  #Home #EditPost {
+  #Home .EditPost {
     margin-top: 80px;
   }
 }
