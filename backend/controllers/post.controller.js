@@ -49,14 +49,46 @@ exports.updatePost = async (request, response) => {
   try {
     const postObject = request.file ? { ...request.body, attachment: `/${request.file.path}` } : { ...request.body };
 
-    const postFound = await Post.findOne({ attributes: [ 'content', 'attachment' ], where: { id: request.params.id } });
+    const postFound = await Post.findOne({ attributes: [ 'content', 'attachment', 'createdAt' ], where: { id: request.params.id } });
     if (!postFound) return response.status(404).json({ error: "post not found" });
 
-    const postUpdated = await postFound.update({ ...postObject, id: request.params.id });
+    await postFound.update({ ...postObject, id: request.params.id });
 
-    response.status(200).json({ message: "post successfully updated!", postUpdated });
+    const payload = await Post.findOne({
+      attributes: [ 'id', 'userId', 'content', 'attachment', 'createdAt' ],
+      include: [
+        { model: User, attributes: [ 'id', 'fullname', 'avatar' ] },
+        { model: Like, attributes: [ 'userId', 'postId' ] },
+        { model: Comment, attributes: [ 'userId', 'postId', 'comment' ] },
+      ],
+      where: { id: postFound.id }
+    });
+
+    response.status(200).json({ message: "post successfully updated!", payload });
   } catch (error) {
     response.status(400).json({ error: error.message })
+  }
+};
+
+exports.deleteAttachment = async (request, response) => {
+  try {
+    const attachment = null;
+
+    const postFound = await Post.findOne({ attributes: [ 'attachment' ], where: { id: request.params.id } });
+    if (!postFound) return response.status(404).json({ error: "post not found" });
+
+    const filename = postFound.attachment.split('images/posts')[1];
+    fs.unlink(`images/posts/${filename}`, async () => {
+      try {
+        await postFound.update({ attachment, id: request.params.id });
+  
+        response.status(200).json({ message: "post has been deleted" });
+      } catch (error) {
+        response.status(400).json({ error: error.message });
+      }
+    });
+  } catch (error) {
+    response.status(400).json({ error: error.message });
   }
 };
 

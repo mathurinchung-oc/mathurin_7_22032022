@@ -21,16 +21,16 @@ function Post({ post }) {
   
   const [ content, setContent ] = useState(post.content);
   const [ attachment, setAttachment ] = useState(post.attachment);
-  const [ file, setFile ] = useState();
-  const [ preview, setPreview ] = useState();
+  const [ file, setFile ] = useState(null);
+  const [ preview, setPreview ] = useState(null);
   const [ liked, setLiked ] = useState(false);
   const [ comment, setComment ] = useState("");
 
-  const handleCancelButton = () => {
+  const handleReset = () => {
     setContent(post.content);
     setAttachment(post.attachment);
-    setFile();
-    setPreview();
+    setFile(null);
+    setPreview(null);
     setIsUpadted(false)
     setShowMenu(false);
   };
@@ -40,16 +40,14 @@ function Post({ post }) {
 
     setFile(e.target.files[0]);
     setPreview(URL.createObjectURL(e.target.files[0]));
-    setAttachment(file);
   };
 
   const cancelAttachment = () => {
-    if (post.attachment) {
-      dispatch(deleteAttachment(post.id))
-    }
+    attachment && deleteAttachment(post.id);
 
-    setPreview();
-    setFile();
+    setAttachment(null);
+    setPreview(null);
+    setFile(null);
   };
 
   const handleUpdatePost = e => {
@@ -59,12 +57,11 @@ function Post({ post }) {
 
     const data = new FormData();
     data.append("content", content);
-    attachment && data.append("file", file);
+    file && data.append("file", file);
 
     dispatch(updatePost(post.id, data));
 
-    setIsUpadted(false);
-    setShowMenu(false);
+    handleReset();
   };
 
   const handleDeletePost = () => {
@@ -120,7 +117,7 @@ function Post({ post }) {
               <FontAwesomeIcon icon="fa-solid fa-trash-can" />
             </Button>
 
-            <Button type="cancel" title="Annuler"  click={ handleCancelButton } >
+            <Button type="cancel" title="Annuler"  click={ handleReset } >
               <FontAwesomeIcon icon="fa-solid fa-xmark" />
             </Button>
           </div>
@@ -128,8 +125,11 @@ function Post({ post }) {
       </header>
 
       <figure className="PostBody">
-          { isUpdated ? file ? <img className="attachment" src={ preview } alt="preview attachment" /> : null
-                      : post.attachment && <img className="attachment" src={ baseURL + post.attachment } alt="post attachment" /> }
+        { !isUpdated && (post.attachment ? <img className="attachment" src={ baseURL + post.attachment } alt="post attachment" /> : null) }
+        { isUpdated && (
+          file ? <img className="attachment" src={ preview } alt="preview attachment" />
+               : (!file && attachment ? <img className="attachment" src={ baseURL + post.attachment } alt="post attachment" /> : null)
+        )}
 
           <figcaption>
             { isUpdated ? <textarea id="content" className="textarea content" value={ content } placeholder="Quoi de neuf ?" onChange={ e => setContent(e.target.value) } />
@@ -158,8 +158,8 @@ function Post({ post }) {
           <p className="timestamp">{ dateParser(post.createdAt) }</p>
         </> :
         <div className="PostIsUpdated">
-          { !file ? <FormUpload id="upload-update-post" change={ handleAttachment } />
-                  : <Button type="secondary" click={ cancelAttachment }>Supprimer l'image</Button>
+          { (attachment || file) ? <Button type="secondary" click={ cancelAttachment }>Supprimer l'image</Button>
+                               : <FormUpload id="upload-update-post" change={ handleAttachment } />
           }
           <Button type="submit" click={ handleUpdatePost }>Publier</Button>
         </div> }

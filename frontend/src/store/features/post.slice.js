@@ -13,12 +13,8 @@ const slice = {
     setUpdatePost: (state, { payload }) => {
       state.all = state.all.map(post => {
         if (post.id === payload.postId) {
-          return {
-            ...post,
-            content: payload.content,
-            attachment: payload.attachment,
-            createdAt: payload.createdAt
-          };
+          console.log(payload)
+          return { ...payload };
         }
 
         return post;

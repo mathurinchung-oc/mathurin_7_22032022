@@ -29,7 +29,7 @@ const updatePost = (postId, data) => {
   return async dispatch => {
     try {
       const response = await axios.put(`${ url }/${ postId }`, data, config);
-      dispatch(setUpdatePost({ postId, ...response.data.postUpdated }));
+      dispatch(setUpdatePost({ postId, ...response.data.payload }));
     } catch (error) {
       console.error(error);
     }
@@ -47,7 +47,14 @@ const deletePost = (postId) => {
   };
 };
 
-const deleteAttachment = () => {};
+const deleteAttachment = async (postId) => {
+    try {
+      await axios.delete(`${ url }/${ postId }/upload`, config);
+    } catch (error) {
+      console.error(error.message);
+    }
+  // };
+};
 
 const likePost = (postId, userId) => {
   return async dispatch => {

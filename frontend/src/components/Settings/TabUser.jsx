@@ -31,6 +31,7 @@ function TabUser() {
     const data = new FormData();
     data.append("fullname", !fullname ? currentUser.fullname : fullname);
     data.append("bio", !bio ? currentUser.bio : bio);
+    data.append("job", !job ? currentUser.job : job);
     data.append("file", file);
 
     dispatch(updateUser(userId, data));
@@ -46,7 +47,7 @@ function TabUser() {
 
       <Form class="UserForm" submit={ handleSubmit }>
         <div className="FormUploadAvatar">
-          { !file ? <Avatar avatar={ currentUser.avatar } /> : <img src={ preview } alt="profile avatar" /> }
+          { !file ? <Avatar avatar={ currentUser.avatar } /> : <img className="Avatar" src={ preview } alt="profile avatar" /> }
           <FormUpload id="upload" change={ handleAttachment } />
         </div>
 

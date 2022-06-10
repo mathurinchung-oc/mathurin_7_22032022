@@ -19,6 +19,7 @@ function User({ user }) {
       <Avatar avatar={ user.avatar } />
       <div className="UserInfo">
         <h3 className="DisplayName">{ user.fullname }</h3>
+        <h4 className="job">{ user.job }</h4>
         { isOwner ? <Button type="btn-user edit-profile" click={ handleClick }><FontAwesomeIcon key="editProfil" icon="fa-solid fa-gear" /> Edit Profile</Button>
                   : admin && <ButtonDeleteUser /> }
         {/* : !isFollowing ? <ButtonFollow /> : <ButtonUnfollow /> */}
