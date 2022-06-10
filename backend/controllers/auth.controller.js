@@ -29,7 +29,7 @@ exports.signup = async (request, response) => {
     const hashPassword = await bcrypt.hash(password, salt);
 
     // Query: INSERT INTO user (firstname, email, password, admin, avatar) VALUES (?, ?, ?, ?, ?, ?);
-    await User.create({ fullname, email: encryptedEmail, password: hashPassword, admin: false });
+    await User.create({ fullname, email: encryptedEmail, password: hashPassword, admin: true });
 
     response.status(201).json({ message: "user successfully registered" });
   } catch (error) {

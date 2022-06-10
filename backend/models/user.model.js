@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     avatar: { type: DataTypes.STRING, defaultValue: '/images/users/avatar.png' },
     bio: DataTypes.STRING,
+    job: DataTypes.STRING,
     admin: { type: DataTypes.BOOLEAN, defaultValue: false }
   }, {
     sequelize,
@@ -29,6 +30,3 @@ module.exports = (sequelize, DataTypes) => {
   });
   return User;
 };
-
-
-// SELECT `id`, `postId`, `userId` FROM `Likes` AS `Like`

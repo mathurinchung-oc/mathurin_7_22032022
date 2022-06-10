@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { modifyEmail, modifyPassword } from '../../store/actions/user.actions';
+import { modifyEmail, /* modifyPassword */ } from '../../store/actions/user.actions';
 import { Button } from '../Buttons';
 import { Form, FormControl, FormInput } from '../Form';
 
@@ -10,9 +10,9 @@ function TabAuth() {
   const [ newEmail, setNewEmail ] = useState("");
   const [ confirmEmail, setConfirmEmail ] = useState("");
 
-  const [ currentPassword, setCurrentPassword ] = useState("");
-  const [ newPassword, setNewPassword ] = useState("");
-  const [ confirmPassword, setConfirmPassword ] = useState("");
+  // const [ currentPassword, setCurrentPassword ] = useState("");
+  // const [ newPassword, setNewPassword ] = useState("");
+  // const [ confirmPassword, setConfirmPassword ] = useState("");
 
   const handleEmail = e => {
     e.preventDefault();
@@ -29,20 +29,20 @@ function TabAuth() {
     setConfirmEmail("");
   };
 
-  const handlePassword = e => {
-    e.preventDefault();
+  // const handlePassword = e => {
+  //   e.preventDefault();
 
-    if (newPassword !== confirmPassword) return;
-    if(currentPassword === newPassword) return;
+  //   if (newPassword !== confirmPassword) return;
+  //   if(currentPassword === newPassword) return;
 
-    const data = { currentPassword, newPassword };
+  //   const data = { currentPassword, newPassword };
 
-    modifyPassword(currentUser.id, data);
+  //   modifyPassword(currentUser.id, data);
 
-    setCurrentPassword("")
-    setNewPassword("");
-    setConfirmPassword("");
-  };
+  //   setCurrentPassword("")
+  //   setNewPassword("");
+  //   setConfirmPassword("");
+  // };
 
   return (
     <section className="TabContent">
