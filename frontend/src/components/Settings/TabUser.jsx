@@ -9,9 +9,9 @@ function TabUser() {
   const { payload: { userId } } = JSON.parse(localStorage.getItem("auth") || "{}") || false;
   const currentUser = useSelector(state => state.user.currentUser);
 
-  const [ fullname, setFullname ] = useState(currentUser.fullname);
-  const [ bio, setBio ] = useState(currentUser.bio);
-  const [ job, setJob ] = useState("job");
+  const [ fullname, setFullname ] = useState("");
+  const [ bio, setBio ] = useState("");
+  const [ job, setJob ] = useState("");
   const [ file, setFile ] = useState();
   const [ preview, setPreview ] = useState();
 

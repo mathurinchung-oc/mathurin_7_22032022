@@ -5,7 +5,7 @@ const { request, response } = require('express');
 
 exports.getAllUsers = async (request, response) => {
   try {
-    const users = await User.findAll({ attributes: ['id', 'fullname', 'avatar', 'bio', 'admin'] });
+    const users = await User.findAll({ attributes: ['id', 'fullname', 'avatar', 'bio', 'job', 'admin'] });
 
     response.status(200).json(users);
   } catch (error) {
@@ -15,7 +15,7 @@ exports.getAllUsers = async (request, response) => {
 
 exports.getOneUser = async (request, response) => {
   try {
-    const userFound = await User.findOne({ attributes: ['id', 'fullname', 'avatar', 'bio', 'admin'], where: { id: request.params.id } });
+    const userFound = await User.findOne({ attributes: ['id', 'fullname', 'avatar', 'bio', 'job', 'admin'], where: { id: request.params.id } });
     if (!userFound) return response.status(404).json({ error: "user not found" });
 
     let email = "";

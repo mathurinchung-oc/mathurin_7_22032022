@@ -20,7 +20,7 @@ function ButtonDanger() {
   };
 
   return (
-    <Button btnType="danger" btnValue="Delete Account" click={ handleClick } />
+    <Button type="danger" click={ handleClick }>Danger zone</Button>
   );
 }
 

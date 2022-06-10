@@ -8,7 +8,7 @@ import { Button } from '../Buttons';
 
 function EditPost() {
   const dispatch = useDispatch();
-  const { id, fullname, avatar } = useSelector(state => state.user.currentUser);
+  const { id, fullname, avatar, job } = useSelector(state => state.user.currentUser);
   const [ content, setContent ] = useState("");
   const [ file, setFile ] = useState();
   const [ preview, setPreview ] = useState();
@@ -49,7 +49,7 @@ function EditPost() {
             <Avatar avatar={ avatar } />
             <div className="PostUserHeading">
               <h3 className="fulname">{ fullname }</h3>
-              <h4 className="job">{ "job" }</h4>
+              <h4 className="job">{ job }</h4>
             </div>
           </Link>
         </header>
