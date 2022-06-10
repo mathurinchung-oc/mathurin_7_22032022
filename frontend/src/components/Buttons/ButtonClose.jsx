@@ -7,7 +7,9 @@ function ButtonClose({ element }) {
   };
 
   return (
-    <Button btnType="close" btnValue={ <FontAwesomeIcon icon="fa-solid fa-xmark" /> } click={ handleClose } />
+    <Button type="close" click={ handleClose }>
+      <FontAwesomeIcon icon="fa-solid fa-xmark" /> 
+    </Button>
   );
 }
 

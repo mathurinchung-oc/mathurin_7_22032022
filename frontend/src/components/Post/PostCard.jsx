@@ -26,20 +26,6 @@ function Post({ post }) {
   const [ liked, setLiked ] = useState(false);
   const [ comment, setComment ] = useState("");
 
-  // const handlePreviewFile = () => {
-  //   const preview = document.querySelector('img');
-  //     const file = document.querySelector('input[type=file]').files[0];
-  //     const reader = new FileReader();
-
-  //     reader.onload(() => {
-  //       preview.src = reader.result;
-  //     }, false);
-
-  //     if (file) {
-  //       reader.readAsDataURL(file);
-  //     }
-  // }
-
   const handleCancelButton = () => {
     setContent(post.content);
     setAttachment(post.attachment);

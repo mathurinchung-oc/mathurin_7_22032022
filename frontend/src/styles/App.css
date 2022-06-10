@@ -1,11 +1,10 @@
-
-
-@import url('./Buttons.css');
-@import url('./Form.css');
+@import url('Buttons.css');
+@import url('Form.css');
 @import url('Header.css');
 @import url('Navbar.css');
 @import url('User.css');
 @import url('Post.css');
+@import url('Tabs.css');
 
 @import url('Home.css');
 @import url('Profile.css');

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { axios } from '../../api';
 import { AuthHeader } from '../../components/Header';
 import { Form, FormControl, FormInput } from '../../components/Form';
-import { ButtonSubmit } from '../../components/Buttons';
+import { Button } from '../../components/Buttons';
 import { FontAwesomeIcon } from '../../components/FontAwesomeIcon';
 
 function Signup() {
@@ -47,7 +47,7 @@ function Signup() {
           <FormControl for="password" label={ <FontAwesomeIcon icon="fa-solid fa-lock" /> }>
             <FormInput id="password" class="AuthInput" type="password" placeholder="Password" value={ password } change={ e => setPassword(e.target.value) } />
           </FormControl>
-          <ButtonSubmit value="Sign up"/>
+          <Button type="submit">Sign up</Button>
         </Form>
       </div>
 

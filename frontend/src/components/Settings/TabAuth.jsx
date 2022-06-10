@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { modifyEmail, modifyPassword } from '../../store/actions/user.actions';
-import { ButtonSubmit } from '../Buttons';
+import { Button } from '../Buttons';
 import { Form, FormControl, FormInput } from '../Form';
 
 function TabAuth() {
@@ -59,10 +59,10 @@ function TabAuth() {
         <FormControl label="confirm email">
           <FormInput id="confirmEmail" type="email" value={ confirmEmail } change={ e => setConfirmEmail(e.target.value) } />
         </FormControl>
-        <ButtonSubmit value="Submit" />
+        <Button type="submit">Submit</Button>
       </Form>
 
-      <Form class="UserForm" submit={ handlePassword }>
+      {/* <Form class="UserForm" submit={ handlePassword }>
         <h4>Password</h4>
         <FormControl label="current password">
           <FormInput id="currentPassword" type="text" value={ currentPassword } change={ e => setCurrentPassword(e.target.value) } />
@@ -73,8 +73,8 @@ function TabAuth() {
         <FormControl label="confirm password">
           <FormInput id="confirmPassword" type="text" value={ confirmPassword } change={ e => setConfirmPassword(e.target.value) } />
         </FormControl>
-        <ButtonSubmit value="Submit" />
-      </Form>
+        <Button type="submit">Submit</Button>
+      </Form> */}
     </section>
   );
 }

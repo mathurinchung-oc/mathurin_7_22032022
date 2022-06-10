@@ -1,19 +1,29 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../store/actions/user.actions";
-import { Form, FormControl, FormInput } from '../Form';
-import { UploadAvatar } from '.';
+import { Form, FormControl, FormInput, FormUpload } from '../Form';
 import { Avatar } from '../User';
-import { ButtonSubmit } from '../Buttons';
+import { Button } from '../Buttons';
 
 function TabUser() {
   const { payload: { userId } } = JSON.parse(localStorage.getItem("auth") || "{}") || false;
   const currentUser = useSelector(state => state.user.currentUser);
-  const [ fullname, setFullname ] = useState("");
-  const [ bio, setBio ] = useState("");
-  const [ file, setFile ] = useState("");
+
+  const [ fullname, setFullname ] = useState(currentUser.fullname);
+  const [ bio, setBio ] = useState(currentUser.bio);
+  const [ job, setJob ] = useState("job");
+  const [ file, setFile ] = useState();
+  const [ preview, setPreview ] = useState();
 
   const dispatch = useDispatch();
+
+  const handleAttachment = e => {
+    e.preventDefault();
+
+    setFile(e.target.files[0]);
+    setPreview(URL.createObjectURL(e.target.files[0]));
+  };
+
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -35,8 +45,10 @@ function TabUser() {
       <h3 className="EditProfileHeading">User Profile</h3>
 
       <Form class="UserForm" submit={ handleSubmit }>
-        <Avatar avatar={ currentUser.avatar } />
-        <UploadAvatar change={ e => setFile(e.target.files[0]) } />
+        <div className="FormUploadAvatar">
+          { !file ? <Avatar avatar={ currentUser.avatar } /> : <img src={ preview } alt="profile avatar" /> }
+          <FormUpload id="upload" change={ handleAttachment } />
+        </div>
 
         <FormControl for="fullname" label="Fullname">
           <FormInput id="fullname" type="text" value={ fullname } change={ e => setFullname(e.target.value) } />
@@ -47,7 +59,12 @@ function TabUser() {
           <FormInput id="bio" type="text" value={ bio } change={ e => setBio(e.target.value) } />
         </FormControl>
 
-        <ButtonSubmit value="Submit" />
+        <FormControl for="job" label="Job">
+          {/* <textarea type="text" /> */}
+          <FormInput id="job" type="text" value={ job } change={ e => setJob(e.target.value) } />
+        </FormControl>
+
+        <Button type="submit">Submit</Button>
       </Form>
     </section>
   );

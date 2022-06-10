@@ -61,8 +61,11 @@
 
 @media screen and (min-width: 992px) {
   #Profile {
-    padding-top: 35px;
+    margin: 0;
+    padding-top: 85px;
   }
+
+
 }
 
 
@@ -70,7 +73,7 @@
   display: none;
   position: absolute;
   top: 0;
-  /* z-index: 100; */
+  z-index: 102;
   width: 100%;
   height: 100vh;
 }
@@ -78,7 +81,6 @@
 #EditProfile .overlay {
   position: absolute;
   background-color: #ccc;
-  z-index: 100;
   width: 100%;
   height: 100%;
   opacity: .75;
@@ -102,7 +104,7 @@
 }
 
 #EditProfile .EditProfileHeading {
-  margin: 15px 0 25px;
+  margin: 10px 0 20px;
   font-size: 18px;
 }
 
@@ -127,7 +129,7 @@
 
 @media screen and (min-width: 541px) {
   #EditProfile .modal {
-    top: 50%;
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 5px;
