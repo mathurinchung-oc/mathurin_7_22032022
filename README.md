@@ -21,7 +21,7 @@ Après en avoir discuté avec Caroline, votre manager, elle vous envoie un mail 
 > **De**: Caroline <br />
 > **À**: Me <br />
 > **Sujet**: Lancement projet Groupomania <br />
-> :paperclip: [specifications](docs/specifications.pdf) [logo](docs/logos.zip)
+> :paperclip: [specifications](docs/specifications.pdf) | :paperclip: [logo](docs/logos.zip)
 >
 > Bonjour,
 >
