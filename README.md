@@ -45,7 +45,6 @@ Après en avoir discuté avec Caroline, votre manager, elle vous envoie un mail 
 >
 > -- <br />
 > Caroline <br />
-> Cheffe de produit <br />
 > Groupomania
 >
 
