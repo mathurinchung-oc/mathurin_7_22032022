@@ -1,0 +1,3 @@
+[submodule "groupomania"]
+	path = groupomania
+	url = https://github.com/mathurinchung/groupomania.git

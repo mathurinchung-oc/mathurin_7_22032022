@@ -1,7 +1,0 @@
-node_modules
-package-*.json
-
-.env.*
-
-images/posts
-images/users
